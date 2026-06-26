@@ -1,0 +1,58 @@
+{
+    "FileVersion": 3,
+    "EngineAssociation": "5.8",
+    "Category": "Game",
+    "Description": "Next-generation 4X Space Strategy MMORPG built on Unreal Engine 5.8. Features procedural galaxy (9 galaxies, 499 systems each), OGamestyle RTS economy (Metal/Crystal/Deuterium/Energy/DarkMatter), 10-ship-class fleet combat with 5 formations, 900+ technology research tree, commander/gacha system, SQL database persistence, empire progression, and social systems.",
+    "Modules": [
+        {
+            "Name": "MMOEngine",
+            "Type": "Runtime",
+            "LoadingPhase": "Default",
+            "AdditionalDependencies": [
+                "Engine"
+            ]
+        }
+    ],
+    "Plugins": [
+        {
+            "Name": "MMOCore",
+            "Enabled": true
+        },
+        {
+            "Name": "MMOCharacter",
+            "Enabled": true
+        },
+        {
+            "Name": "MMOInventory",
+            "Enabled": true
+        },
+        {
+            "Name": "MMOCombat",
+            "Enabled": true
+        },
+        {
+            "Name": "MMOWorld",
+            "Enabled": true
+        },
+        {
+            "Name": "MMOQuest",
+            "Enabled": true
+        },
+        {
+            "Name": "MMOParty",
+            "Enabled": true
+        },
+        {
+            "Name": "MMOChat",
+            "Enabled": true
+        },
+        {
+            "Name": "MMOUI",
+            "Enabled": true
+        },
+        {
+            "Name": "MMOSpace",
+            "Enabled": true
+        }
+    ]
+}

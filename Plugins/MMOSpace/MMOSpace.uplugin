@@ -1,0 +1,33 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0.0",
+	"FriendlyName": "MMO Space - RTS 4X Strategy",
+	"Description": "Complete RTS/4X space strategy game engine for Unreal Engine 5.8. Features procedural galaxy generation, empire management, fleet combat, research trees, economy, and SQL persistence layer.",
+	"Category": "Game",
+	"CreatedBy": "MMOEngine",
+	"CreatedByURL": "",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "MMOSpace",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine"
+			]
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "MMOCore",
+			"Enabled": true
+		}
+	]
+}

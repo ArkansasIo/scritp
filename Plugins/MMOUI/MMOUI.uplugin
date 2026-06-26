@@ -1,0 +1,33 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "MMOUI",
+	"Description": "Complete UI/HUD framework for MMORPG",
+	"Category": "UI",
+	"CreatedBy": "",
+	"CreatedByURL": "",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "MMOUI",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"ModuleDependency": [
+				"MMOCore",
+				"MMOCharacter",
+				"MMOInventory",
+				"MMOCombat",
+				"MMOQuest",
+				"MMOParty",
+				"MMOChat"
+			]
+		}
+	]
+}

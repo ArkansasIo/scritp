@@ -1,0 +1,29 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0.0",
+	"FriendlyName": "MMO Inventory System",
+	"Description": "Comprehensive inventory and item system for MMORPG game engine supporting items, equipment, containers, loot tables, and full replication.",
+	"Category": "Gameplay",
+	"CreatedBy": "MMOEngine",
+	"CreatedByURL": "",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"EnabledByDefault": true,
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "MMOInventory",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"MMOCore",
+				"GameplayTags"
+			]
+		}
+	]
+}

@@ -1,0 +1,24 @@
+{
+	"FileVersion": 3,
+	"EngineVersion": "5.8.0",
+	"Category": "Gameplay",
+	"Description": "MMORPG quest system plugin.",
+	"Modules": [
+		{
+			"Name": "MMOQuest",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"WhitelistPlatforms": []
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "MMOCore",
+			"Enabled": true
+		},
+		{
+			"Name": "MMOCharacter",
+			"Enabled": true
+		}
+	]
+}

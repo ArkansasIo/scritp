@@ -1,0 +1,35 @@
+# Unreal Engine
+Binaries/
+Build/
+DerivedDataCache/
+Intermediate/
+Saved/
+*.sln
+*.slnx
+*.suo
+*.user
+*.opensdf
+*.sdf
+*.db
+*.VC.db
+*.VC.opendb
+UpgradeLog.htm
+
+# Visual Studio
+.vs/
+*.csproj
+*.vcxproj
+*.vcxproj.filters
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Logs
+*.log
+
+# Config
+Saved/Config/
