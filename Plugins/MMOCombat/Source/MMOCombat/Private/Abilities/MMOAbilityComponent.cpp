@@ -4,7 +4,7 @@
 #include "Net/UnrealNetwork.h"
 #include "Engine/World.h"
 #include "TimerManager.h"
-#include "MMOCharacterBase.h"
+#include "Characters/MMOCharacterBase.h"
 
 UMMOAbilityComponent::UMMOAbilityComponent()
 {
@@ -69,7 +69,7 @@ void UMMOAbilityComponent::OnRep_IsCasting()
 
 bool UMMOAbilityComponent::LearnAbility(TSoftObjectPtr<UMMOAbilityBase> AbilityPtr, int32 Rank)
 {
-	if (!HasAuthority())
+	if (GetNetMode() == NM_Client)
 	{
 		return false;
 	}
@@ -99,7 +99,7 @@ bool UMMOAbilityComponent::LearnAbility(TSoftObjectPtr<UMMOAbilityBase> AbilityP
 
 bool UMMOAbilityComponent::UnlearnAbility(FName AbilityID)
 {
-	if (!HasAuthority())
+	if (GetNetMode() == NM_Client)
 	{
 		return false;
 	}
@@ -113,7 +113,7 @@ bool UMMOAbilityComponent::UnlearnAbility(FName AbilityID)
 
 			for (int32 j = HotbarSlots.Num() - 1; j >= 0; --j)
 			{
-				if (HotbarSlots[j].Ability.GetUniqueID() == KnownAbilities[i]->GetUniqueID())
+				if (HotbarSlots[j].Ability.Get() == KnownAbilities[i])
 				{
 					HotbarSlots[j].Ability = nullptr;
 				}
@@ -126,7 +126,7 @@ bool UMMOAbilityComponent::UnlearnAbility(FName AbilityID)
 
 bool UMMOAbilityComponent::RankUpAbility(FName AbilityID)
 {
-	if (!HasAuthority())
+	if (GetNetMode() == NM_Client)
 	{
 		return false;
 	}
@@ -199,7 +199,7 @@ UMMOAbilityBase* UMMOAbilityComponent::GetAbilityInSlot(int32 SlotIndex) const
 
 bool UMMOAbilityComponent::StartCast(int32 SlotIndex, const FVector& TargetLocation, AMMOCharacterBase* Target)
 {
-	if (!SlotIndex >= 0 || SlotIndex >= HotbarSlots.Num())
+	if (SlotIndex < 0 || SlotIndex >= HotbarSlots.Num())
 	{
 		return false;
 	}

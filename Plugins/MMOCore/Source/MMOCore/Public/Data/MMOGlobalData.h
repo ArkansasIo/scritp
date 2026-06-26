@@ -120,7 +120,7 @@ struct FMMOGlobalConstant
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnGlobalDataLoaded);
 
 UCLASS(BlueprintType, Blueprintable)
-class MMCORE_API UMMOGlobalData : public UPrimaryDataAsset
+class MMOCORE_API UMMOGlobalData : public UPrimaryDataAsset
 {
 	GENERATED_BODY()
 
@@ -139,13 +139,10 @@ public:
 	UFUNCTION(BlueprintPure, Category = "MMO|Experience")
 	float GetLevelStatMultiplier(int32 Level) const;
 
-	UFUNCTION(BlueprintPure, Category = "MMO|Stats")
 	const FMMOStatDefinition* GetStatDefinition(FName StatName) const;
 
-	UFUNCTION(BlueprintPure, Category = "MMO|Stats")
 	const FMMOStatDefinition* GetStatDefinitionByTag(FGameplayTag StatTag) const;
 
-	UFUNCTION(BlueprintPure, Category = "MMO|DamageTypes")
 	const FMMODamageTypeDefinition* GetDamageTypeDefinition(FName TypeName) const;
 
 	UFUNCTION(BlueprintPure, Category = "MMO|Constants")
@@ -172,7 +169,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Constants")
 	TArray<FMMOGlobalConstant> GlobalConstants;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "DropRates")
 	TMap<FName, TArray<FMMODropRateEntry>> DropRateTables;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "GameplayTags")

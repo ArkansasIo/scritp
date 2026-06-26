@@ -58,11 +58,6 @@ void UMMOWorldSubsystem::Deinitialize()
 	Super::Deinitialize();
 }
 
-TStatId UMMOWorldSubsystem::GetStatId() const
-{
-	RETURN_QUICK_DECLARE_CYCLE_STAT(UMMOWorldSubsystem, STATGROUP_Tickables);
-}
-
 void UMMOWorldSubsystem::LoadZoneDefinitions()
 {
 	ZoneDefinitions.Empty();
@@ -96,7 +91,7 @@ UMMOZoneData* UMMOWorldSubsystem::GetZoneByID(FName ZoneID) const
 {
 	if (const UMMOZoneData* const* Found = ZoneDefinitions.Find(ZoneID))
 	{
-		return *Found;
+		return const_cast<UMMOZoneData*>(*Found);
 	}
 	return nullptr;
 }

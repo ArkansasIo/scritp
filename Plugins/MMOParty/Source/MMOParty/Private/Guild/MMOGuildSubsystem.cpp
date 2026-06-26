@@ -1,4 +1,5 @@
 #include "Guild/MMOGuildSubsystem.h"
+#include "MMOParty.h"
 #include "Misc/Guid.h"
 #include "Engine/World.h"
 

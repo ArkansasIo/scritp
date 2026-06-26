@@ -5,7 +5,7 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(LogMMOQuest, Log, All);
 
-class MMQUEST_API FMMOQuestModule : public IModuleInterface
+class MMOQUEST_API FMMOQuestModule : public IModuleInterface
 {
 public:
 	virtual void StartupModule() override;

@@ -35,7 +35,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnPlayerLevelChanged, int32, OldLe
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDisplayNameChanged, const FString&, NewDisplayName);
 
 UCLASS(Blueprintable, BlueprintType)
-class MMCORE_API AMMOPlayerState : public APlayerState
+class MMOCORE_API AMMOPlayerState : public APlayerState
 {
 	GENERATED_BODY()
 

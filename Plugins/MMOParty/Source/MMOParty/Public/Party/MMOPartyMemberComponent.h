@@ -13,7 +13,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnVoteKickInitiatedDelegate, const
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnPartyChatMessageDelegate, const FString&, SenderName, const FString&, Message);
 
 UCLASS(ClassGroup = (MMO), meta = (BlueprintSpawnableComponent))
-class MMPARTY_API UMMOPartyMemberComponent : public UActorComponent
+class MMOPARTY_API UMMOPartyMemberComponent : public UActorComponent
 {
 	GENERATED_BODY()
 

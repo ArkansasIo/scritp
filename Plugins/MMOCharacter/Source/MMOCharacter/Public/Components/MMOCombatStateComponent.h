@@ -40,7 +40,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTargetLocked, AActor*, Target);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTargetUnlocked, AActor*, Target);
 
 UCLASS(ClassGroup = (MMO), meta = (BlueprintSpawnableComponent), Blueprintable, BlueprintType)
-class MMCHARACTER_API UMMOCombatStateComponent : public UActorComponent
+class MMOCHARACTER_API UMMOCombatStateComponent : public UActorComponent
 {
 	GENERATED_BODY()
 

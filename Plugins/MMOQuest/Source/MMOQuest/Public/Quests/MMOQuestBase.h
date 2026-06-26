@@ -22,7 +22,7 @@ enum class EQuestType : uint8
 };
 
 USTRUCT(BlueprintType)
-struct MMQUEST_API FMMOQuestReward
+struct MMOQUEST_API FMMOQuestReward
 {
 	GENERATED_BODY()
 
@@ -35,7 +35,6 @@ struct MMQUEST_API FMMOQuestReward
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Reward")
 	TMap<FGameplayTag, int32> FixedItems;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Reward")
 	TArray<TMap<FGameplayTag, int32>> ChoiceItems;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Reward")
@@ -49,7 +48,7 @@ struct MMQUEST_API FMMOQuestReward
 };
 
 UCLASS(BlueprintType, Const)
-class MMQUEST_API UMMOQuestBase : public UPrimaryDataAsset
+class MMOQUEST_API UMMOQuestBase : public UPrimaryDataAsset
 {
 	GENERATED_BODY()
 

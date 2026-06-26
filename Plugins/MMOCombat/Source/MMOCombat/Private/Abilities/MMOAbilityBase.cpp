@@ -1,6 +1,7 @@
 #include "Abilities/MMOAbilityBase.h"
 #include "Abilities/MMOAbilityComponent.h"
 #include "GameFramework/Character.h"
+#include "Characters/MMOCharacterBase.h"
 
 UMMOAbilityBase::UMMOAbilityBase()
 {

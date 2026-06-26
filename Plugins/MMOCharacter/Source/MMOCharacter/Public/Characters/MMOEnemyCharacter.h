@@ -16,7 +16,7 @@ enum class EMMOEnemyDifficultyTier : uint8
 };
 
 UCLASS(Blueprintable, BlueprintType)
-class MMCHARACTER_API AMMOEnemyCharacter : public AMMOCharacterBase
+class MMOCHARACTER_API AMMOEnemyCharacter : public AMMOCharacterBase
 {
 	GENERATED_BODY()
 
@@ -30,7 +30,7 @@ public:
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MMO|Enemy|AI")
-	TSubclassOf<AAIController> AIControllerClass;
+	TSubclassOf<AAIController> EnemyAIControllerClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MMO|Enemy|AI")
 	TObjectPtr<AAIController> AIController;
@@ -132,7 +132,7 @@ protected:
 	void SpawnVisualEffects();
 
 	UPROPERTY()
-	FTimerHandle RespawnTimerHandle;
+	FTimerHandle EnemyRespawnTimerHandle;
 
 	FVector SpawnOrigin;
 

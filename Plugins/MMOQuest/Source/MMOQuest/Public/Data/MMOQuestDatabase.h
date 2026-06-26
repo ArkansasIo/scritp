@@ -1,22 +1,31 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Engine/DataTable.h"
 #include "Subsystems/WorldSubsystem.h"
 #include "GameplayTagContainer.h"
-#include "MMOQuestBase.h"
+#include "Quests/MMOQuestBase.h"
 #include "MMOQuestDatabase.generated.h"
+
+USTRUCT(BlueprintType)
+struct FMMOQuestTableRow : public FTableRowBase
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Quest")
+	TSoftObjectPtr<UMMOQuestBase> Quest;
+};
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnQuestDatabaseReady, bool, bSuccess);
 
 UCLASS()
-class MMQUEST_API UMMOQuestDatabase : public UWorldSubsystem
+class MMOQUEST_API UMMOQuestDatabase : public UWorldSubsystem
 {
 	GENERATED_BODY()
 
 public:
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 	virtual void Deinitialize() override;
-	virtual TStatId GetStatId() const override;
 
 	UPROPERTY(BlueprintAssignable, Category = "Quest Database")
 	FOnQuestDatabaseReady OnDatabaseReady;

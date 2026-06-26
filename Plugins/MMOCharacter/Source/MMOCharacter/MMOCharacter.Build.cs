@@ -15,7 +15,8 @@ public class MMOCharacter : ModuleRules
 			"EnhancedInput",
 			"GameplayTags",
 			"MMOCore",
-			"Niagara"
+			"Niagara",
+			"MMOInventory"
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[]

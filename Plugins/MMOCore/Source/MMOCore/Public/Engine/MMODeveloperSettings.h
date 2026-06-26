@@ -23,7 +23,7 @@ struct FMMOLevelRequirement
 };
 
 UCLASS(Config = "MMOCore", DefaultConfig, BlueprintType, meta = (DisplayName = "MMOCore Settings"))
-class MMCORE_API UMMODeveloperSettings : public UDeveloperSettings
+class MMOCORE_API UMMODeveloperSettings : public UDeveloperSettings
 {
 	GENERATED_BODY()
 

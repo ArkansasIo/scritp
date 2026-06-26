@@ -44,7 +44,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEndFocus, AMMOCharacterBase*, Unf
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnInteract, AMMOCharacterBase*, InteractingCharacter, AMMOCharacterBase*, TargetCharacter);
 
 UCLASS(ClassGroup = (MMO), meta = (BlueprintSpawnableComponent), Blueprintable, BlueprintType)
-class MMCHARACTER_API UMMOInteractionComponent : public UActorComponent
+class MMOCHARACTER_API UMMOInteractionComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
@@ -125,6 +125,5 @@ protected:
 	virtual void UpdateInteractablesInRange();
 	virtual void UpdateFocus();
 
-	UPROPERTY()
-	TScriptInterface<class IMMOInteractableInterface> InteractableInterface;
+
 };

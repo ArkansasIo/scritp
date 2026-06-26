@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Characters/MMOCharacterBase.h"
+#include "Items/MMOEquipmentItem.h"
 #include "GameplayTagContainer.h"
 #include "MMOPlayerCharacter.generated.h"
 
@@ -70,10 +71,10 @@ enum class EMMOPvPFlag : uint8
 	InPvP
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEquipmentChanged, class UMMOEquipItem*, EquipItem);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEquipmentChanged, UMMOEquipmentItem*, EquipItem);
 
 UCLASS(Blueprintable, BlueprintType)
-class MMCHARACTER_API AMMOPlayerCharacter : public AMMOCharacterBase
+class MMOCHARACTER_API AMMOPlayerCharacter : public AMMOCharacterBase
 {
 	GENERATED_BODY()
 
@@ -129,19 +130,19 @@ public:
 	virtual void ServerSetPvPFlag(EMMOPvPFlag NewFlag);
 
 	UPROPERTY(BlueprintReadOnly, Category = "MMO|Equipment")
-	TArray<TObjectPtr<class UMMOEquipItem>> EquipmentSlots;
+	TArray<TObjectPtr<UMMOEquipmentItem>> EquipmentSlots;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "MMO|Equipment")
 	int32 NumEquipmentSlots;
 
 	UFUNCTION(BlueprintCallable, Category = "MMO|Equipment")
-	virtual void EquipItem(class UMMOEquipItem* Item);
+	virtual void EquipItem(UMMOEquipmentItem* Item);
 
 	UFUNCTION(BlueprintCallable, Category = "MMO|Equipment")
 	virtual void UnEquipItem(int32 SlotIndex);
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "MMO|Equipment")
-	void BP_UpdateEquipmentMesh(int32 SlotIndex, class UMMOEquipItem* Item);
+	void BP_UpdateEquipmentMesh(int32 SlotIndex, UMMOEquipmentItem* Item);
 
 	UPROPERTY(BlueprintAssignable, Category = "MMO|Events")
 	FOnEquipmentChanged OnEquipmentChanged;

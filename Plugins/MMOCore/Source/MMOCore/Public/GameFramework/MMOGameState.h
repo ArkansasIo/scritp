@@ -57,7 +57,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnServerPopulationChanged, EMMOServ
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnServerAnnouncement, const FMMOServerAnnouncement&, Announcement);
 
 UCLASS(Blueprintable, BlueprintType)
-class MMCORE_API AMMOGameState : public AGameStateBase
+class MMOCORE_API AMMOGameState : public AGameStateBase
 {
 	GENERATED_BODY()
 

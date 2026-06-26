@@ -13,6 +13,15 @@ struct FTechDefinition
 {
 	GENERATED_BODY()
 
+	bool operator==(const FTechDefinition& Other) const
+	{
+		return TechId == Other.TechId && TechName == Other.TechName
+			&& Description == Other.Description && Category == Other.Category
+			&& Tier == Other.Tier && Prerequisites == Other.Prerequisites
+			&& ResearchCost == Other.ResearchCost && ResearchTime == Other.ResearchTime
+			&& Bonuses.OrderIndependentCompareEqual(Other.Bonuses);
+	}
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Research")
 	int32 TechId = 0;
 
@@ -45,6 +54,13 @@ USTRUCT(BlueprintType)
 struct FResearchQueueItem
 {
 	GENERATED_BODY()
+
+	bool operator==(const FResearchQueueItem& Other) const
+	{
+		return TechId == Other.TechId && Category == Other.Category
+			&& StartTime == Other.StartTime && EndTime == Other.EndTime
+			&& bPaused == Other.bPaused;
+	}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Research")
 	int32 TechId = 0;

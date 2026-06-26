@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "UI/MMOHUD.h"
 #include "UI/MMOHUDWidget.h"
 #include "Engine/DataTable.h"
 #include "MMOTooltipWidget.generated.h"

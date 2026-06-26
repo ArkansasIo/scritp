@@ -14,7 +14,7 @@ struct MMOINVENTORY_API FMMOItemTableRow : public FTableRowBase
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
-	TSoftObjectPtr<UClass> ItemClass;
+	TSoftClassPtr<UMMOItemBase> ItemClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
 	FName ItemID;
@@ -35,7 +35,7 @@ struct MMOINVENTORY_API FMMOItemTableRow : public FTableRowBase
 	FGameplayTagContainer GameplayTags;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
-	TAssetPtr<UMMOItemBase> ItemAsset;
+	TSoftObjectPtr<UMMOItemBase> ItemAsset;
 };
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnItemDatabaseReady, class UMMOItemDatabase*, Database);

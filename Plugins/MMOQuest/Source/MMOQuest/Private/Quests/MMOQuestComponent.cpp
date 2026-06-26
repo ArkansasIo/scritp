@@ -168,7 +168,7 @@ void UMMOQuestComponent::InternalCompleteQuest(const UMMOQuestBase* Quest)
 	}
 
 	const FMMOActiveQuestState& State = ActiveQuests[Slot];
-	GrantQuestRewards(const_cast<UMMOQuestBase*>(Quest));
+	GrantQuestRewards(const_cast<UMMOQuestBase*>(Quest), INDEX_NONE);
 
 	FMMOCompletedQuestEntry CompletedEntry;
 	CompletedEntry.QuestID = Quest->QuestID;
@@ -420,7 +420,7 @@ UMMOQuestBase* UMMOQuestComponent::GetQuestData(FGameplayTag QuestID) const
 {
 	if (const UMMOQuestBase* const* Found = QuestDataCache.Find(QuestID))
 	{
-		return *Found;
+		return const_cast<UMMOQuestBase*>(*Found);
 	}
 	if (UWorld* World = GetWorld())
 	{

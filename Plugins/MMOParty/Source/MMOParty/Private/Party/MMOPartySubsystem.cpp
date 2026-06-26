@@ -1,4 +1,5 @@
 #include "Party/MMOPartySubsystem.h"
+#include "MMOParty.h"
 #include "Engine/World.h"
 #include "Engine/Engine.h"
 #include "TimerManager.h"

@@ -15,7 +15,8 @@ enum class EGuildPermission : uint8
 	Chat         = 1 << 4,
 	BankDeposit  = 1 << 5,
 	BankWithdraw = 1 << 6,
-	WarDeclare   = 1 << 7
+	WarDeclare   = 1 << 7,
+	All          = 255
 };
 ENUM_CLASS_FLAGS(EGuildPermission);
 
@@ -267,7 +268,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnGuildMemberJoinedDelegate, const 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnGuildMemberLeftDelegate, const FString&, PlayerId);
 
 UCLASS(BlueprintType)
-class MMPARTY_API UMMOGuildSubsystem : public UGameInstanceSubsystem
+class MMOPARTY_API UMMOGuildSubsystem : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
 

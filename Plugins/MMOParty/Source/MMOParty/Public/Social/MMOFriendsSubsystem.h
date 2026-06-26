@@ -127,7 +127,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnFriendOnlineStatusDelegate, cons
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnRecentPlayersUpdatedDelegate, const TArray<FRecentPlayer>&, RecentPlayers);
 
 UCLASS(BlueprintType)
-class MMPARTY_API UMMOFriendsSubsystem : public UGameInstanceSubsystem
+class MMOPARTY_API UMMOFriendsSubsystem : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
 

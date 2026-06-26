@@ -31,7 +31,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "MMO HUD Widget")
 	void Hide();
 
-	UFUNCTION(BlueprintPure, Category = "MMO HUD Widget")
 	bool IsVisible() const { return bIsVisible; }
 
 	UFUNCTION(BlueprintCallable, Category = "MMO HUD Widget")

@@ -1,5 +1,6 @@
 #include "UI/MMOHUDWidget.h"
 #include "Animation/WidgetAnimation.h"
+#include "Blueprint/WidgetBlueprintGeneratedClass.h"
 #include "Blueprint/WidgetBlueprintLibrary.h"
 #include "Engine/GameViewportClient.h"
 #include "Engine/UserInterfaceSettings.h"
@@ -101,19 +102,23 @@ void UMMOHUDWidget::FadeOutFinished()
 
 UUMGSequencePlayer* UMMOHUDWidget::PlayAnimationByName(FName AnimationName, float StartAtTime, int32 NumLoopsToPlay, EUMGSequencePlayMode::Type PlayMode, float PlaybackSpeed)
 {
-	UWidgetAnimation* const* FoundAnimation = nullptr;
-	for (const auto& Anim : GetAllAnimations())
+	UWidgetAnimation* FoundAnimation = nullptr;
+	UWidgetBlueprintGeneratedClass* WidgetClass = Cast<UWidgetBlueprintGeneratedClass>(GetClass());
+	if (WidgetClass)
 	{
-		if (Anim && Anim->GetFName() == AnimationName)
+		for (UWidgetAnimation* Anim : WidgetClass->Animations)
 		{
-			FoundAnimation = &Anim;
-			break;
+			if (Anim && Anim->GetFName() == AnimationName)
+			{
+				FoundAnimation = Anim;
+				break;
+			}
 		}
 	}
 
-	if (FoundAnimation && *FoundAnimation)
+	if (FoundAnimation)
 	{
-		return PlayAnimation(*FoundAnimation, StartAtTime, NumLoopsToPlay, PlayMode, PlaybackSpeed);
+		return PlayAnimation(FoundAnimation, StartAtTime, NumLoopsToPlay, PlayMode, PlaybackSpeed);
 	}
 
 	return nullptr;

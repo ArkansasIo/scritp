@@ -2,7 +2,6 @@
 
 #include "CoreMinimal.h"
 #include "Engine/EngineTypes.h"
-#include "Engine/UniqueNetIdRepl.h"
 #include "GameFramework/MMOPlayerController.h"
 #include "MMOChatMessage.generated.h"
 
@@ -17,12 +16,12 @@ enum class EMMOChatType : uint8
 };
 
 USTRUCT(BlueprintType)
-struct MMCHAT_API FMMOChatMessage
+struct MMOCHAT_API FMMOChatMessage
 {
     GENERATED_BODY()
 
     UPROPERTY(BlueprintReadWrite, Category = "Chat")
-    FUniqueNetIdRepl SenderId;
+    FString SenderId;
 
     UPROPERTY(BlueprintReadWrite, Category = "Chat")
     FString SenderName;

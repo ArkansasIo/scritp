@@ -129,7 +129,7 @@ struct FMMOSecondaryStats
 };
 
 UCLASS(ClassGroup = (MMO), meta = (BlueprintSpawnableComponent), Blueprintable, BlueprintType)
-class MMCHARACTER_API UMMOStatComponent : public UActorComponent
+class MMOCHARACTER_API UMMOStatComponent : public UActorComponent
 {
 	GENERATED_BODY()
 

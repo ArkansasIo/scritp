@@ -62,7 +62,7 @@ struct FMMOBindingPoint
 };
 
 UCLASS(BlueprintType)
-class MMWORLD_API UMMOZoneData : public UPrimaryDataAsset
+class MMOWORLD_API UMMOZoneData : public UPrimaryDataAsset
 {
 	GENERATED_BODY()
 

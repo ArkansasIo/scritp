@@ -20,7 +20,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMovementModeChanged, EMMOMovement
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnStaminaExhausted, bool, bExhausted);
 
 UCLASS(ClassGroup = (MMO), meta = (BlueprintSpawnableComponent))
-class MMCHARACTER_API UMMOCharacterMovementComponent : public UCharacterMovementComponent
+class MMOCHARACTER_API UMMOCharacterMovementComponent : public UCharacterMovementComponent
 {
 	GENERATED_BODY()
 

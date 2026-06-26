@@ -19,7 +19,7 @@ enum class EQuestObjectiveType : uint8
 };
 
 USTRUCT(BlueprintType)
-struct MMQUEST_API FMMOQuestObjective
+struct MMOQUEST_API FMMOQuestObjective
 {
 	GENERATED_BODY()
 

@@ -66,7 +66,7 @@ struct FMMOAbilityUnlock
 };
 
 UCLASS(BlueprintType)
-class MMCHARACTER_API UMMOLevelDataAsset : public UDataAsset
+class MMOCHARACTER_API UMMOLevelDataAsset : public UDataAsset
 {
 	GENERATED_BODY()
 

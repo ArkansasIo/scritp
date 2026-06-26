@@ -22,11 +22,6 @@ void UMMOQuestDatabase::Deinitialize()
 	Super::Deinitialize();
 }
 
-TStatId UMMOQuestDatabase::GetStatId() const
-{
-	RETURN_QUICK_DECLARE_CYCLE_STAT(UMMOQuestDatabase, STATGROUP_Tickables);
-}
-
 void UMMOQuestDatabase::LoadFromPrimaryDataAssets()
 {
 	for (const TSoftObjectPtr<UMMOQuestBase>& AssetPtr : QuestAssetDirectories)
@@ -55,14 +50,18 @@ void UMMOQuestDatabase::LoadFromDataTable()
 	if (UDataTable* Table = QuestDataTable.Get())
 	{
 		static const FString ContextStr(TEXT("MMOQuestDatabase::LoadFromDataTable"));
-		TArray<UMMOQuestBase*> LoadedQuests;
-		Table->GetAllRows<UMMOQuestBase>(ContextStr, LoadedQuests);
-		for (UMMOQuestBase* Quest : LoadedQuests)
+		TArray<FMMOQuestTableRow*> Rows;
+		Table->GetAllRows<FMMOQuestTableRow>(ContextStr, Rows);
+		for (const FMMOQuestTableRow* Row : Rows)
 		{
-			if (Quest && Quest->QuestID.IsValid() && !QuestMap.Contains(Quest->QuestID))
+			if (Row)
 			{
-				QuestMap.Add(Quest->QuestID, Quest);
-				QuestList.Add(Quest);
+				UMMOQuestBase* Quest = Row->Quest.LoadSynchronous();
+				if (Quest && Quest->QuestID.IsValid() && !QuestMap.Contains(Quest->QuestID))
+				{
+					QuestMap.Add(Quest->QuestID, Quest);
+					QuestList.Add(Quest);
+				}
 			}
 		}
 	}
@@ -71,7 +70,7 @@ void UMMOQuestDatabase::LoadFromDataTable()
 UMMOQuestBase* UMMOQuestDatabase::GetQuestByID(FGameplayTag QuestID) const
 {
 	const UMMOQuestBase* const* Found = QuestMap.Find(QuestID);
-	return Found ? *Found : nullptr;
+	return Found ? const_cast<UMMOQuestBase*>(*Found) : nullptr;
 }
 
 TArray<UMMOQuestBase*> UMMOQuestDatabase::GetQuestsByLevelRange(int32 MinLevel, int32 MaxLevel) const

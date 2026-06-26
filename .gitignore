@@ -30,6 +30,8 @@ Desktop.ini
 
 # Logs
 *.log
+BuildLog*
+BuildLog-backup*
 
 # Config
 Saved/Config/

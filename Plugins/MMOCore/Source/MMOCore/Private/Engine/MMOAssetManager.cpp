@@ -27,55 +27,25 @@ void UMMOAssetManager::StartInitialLoading()
 
 	UE_LOG(LogMMOCore, Log, TEXT("MMOAssetManager starting initial loading"));
 
-	FPrimaryAssetTypeInfo ItemTypeInfo = FPrimaryAssetTypeInfo(
-		TEXT("MMOItem"),
-		TEXT(""),
-		TEXT(""),
-		TArray<FDirectoryPath>(),
-		TArray<FString>()
-	);
+	FPrimaryAssetTypeInfo ItemTypeInfo;
+	ItemTypeInfo.PrimaryAssetType = TEXT("MMOItem");
 	ItemTypeInfo.bIsDynamicAsset = true;
 	RegisterPrimaryAssetType(ItemTypeInfo);
 
-	FPrimaryAssetTypeInfo AbilityTypeInfo = FPrimaryAssetTypeInfo(
-		TEXT("MMOAbility"),
-		TEXT(""),
-		TEXT(""),
-		TArray<FDirectoryPath>(),
-		TArray<FString>()
-	);
+	FPrimaryAssetTypeInfo AbilityTypeInfo;
+	AbilityTypeInfo.PrimaryAssetType = TEXT("MMOAbility");
 	AbilityTypeInfo.bIsDynamicAsset = true;
 	RegisterPrimaryAssetType(AbilityTypeInfo);
 
-	FPrimaryAssetTypeInfo QuestTypeInfo = FPrimaryAssetTypeInfo(
-		TEXT("MMOQuest"),
-		TEXT(""),
-		TEXT(""),
-		TArray<FDirectoryPath>(),
-		TArray<FString>()
-	);
+	FPrimaryAssetTypeInfo QuestTypeInfo;
+	QuestTypeInfo.PrimaryAssetType = TEXT("MMOQuest");
 	QuestTypeInfo.bIsDynamicAsset = true;
 	RegisterPrimaryAssetType(QuestTypeInfo);
 
-	FPrimaryAssetTypeInfo GlobalDataTypeInfo = FPrimaryAssetTypeInfo(
-		TEXT("MMOGlobalData"),
-		TEXT(""),
-		TEXT(""),
-		TArray<FDirectoryPath>(),
-		TArray<FString>()
-	);
+	FPrimaryAssetTypeInfo GlobalDataTypeInfo;
+	GlobalDataTypeInfo.PrimaryAssetType = TEXT("MMOGlobalData");
 	GlobalDataTypeInfo.bIsDynamicAsset = true;
 	RegisterPrimaryAssetType(GlobalDataTypeInfo);
-}
-
-void UMMOAssetManager::PostInitialLoadComplete()
-{
-	Super::PostInitialLoadComplete();
-
-	UE_LOG(LogMMOCore, Log, TEXT("MMOAssetManager post initial load complete"));
-
-	LoadGlobalData();
-	bDataLoaded = true;
 }
 
 void UMMOAssetManager::LoadItemDatabase()

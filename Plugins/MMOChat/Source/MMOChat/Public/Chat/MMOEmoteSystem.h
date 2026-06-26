@@ -20,7 +20,7 @@ enum class EMMOEmoteCategory : uint8
 };
 
 USTRUCT(BlueprintType)
-struct MMCHAT_API FMMOEmoteDefinition
+struct MMOCHAT_API FMMOEmoteDefinition
 {
     GENERATED_BODY()
 
@@ -56,18 +56,16 @@ struct MMCHAT_API FMMOEmoteDefinition
 };
 
 UCLASS(BlueprintType, Within = MMOChatSubsystem)
-class MMCHAT_API UMMOEmoteSystem : public UObject
+class MMOCHAT_API UMMOEmoteSystem : public UObject
 {
     GENERATED_BODY()
 
 public:
     void InitializeDefaultEmotes();
 
-    UFUNCTION(BlueprintCallable, Category = "Emote")
-    const FMMOEmoteDefinition* FindEmoteByCommand(const FString& Command) const;
+	const FMMOEmoteDefinition* FindEmoteByCommand(const FString& Command) const;
 
-    UFUNCTION(BlueprintCallable, Category = "Emote")
-    const FMMOEmoteDefinition* FindEmoteById(const FName& EmoteId) const;
+	const FMMOEmoteDefinition* FindEmoteById(const FName& EmoteId) const;
 
     UFUNCTION(BlueprintCallable, Category = "Emote")
     TArray<FMMOEmoteDefinition> GetEmotesByCategory(EMMOEmoteCategory Category) const;

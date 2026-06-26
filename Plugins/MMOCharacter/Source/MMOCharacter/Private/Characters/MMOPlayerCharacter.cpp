@@ -122,7 +122,7 @@ void AMMOPlayerCharacter::ServerSetPvPFlag_Implementation(EMMOPvPFlag NewFlag)
 	SetPvPFlag(NewFlag);
 }
 
-void AMMOPlayerCharacter::EquipItem(class UMMOEquipItem* Item)
+void AMMOPlayerCharacter::EquipItem(UMMOEquipmentItem* Item)
 {
 	if (!Item || !HasAuthority())
 	{
@@ -154,7 +154,7 @@ void AMMOPlayerCharacter::UnEquipItem(int32 SlotIndex)
 		return;
 	}
 
-	UMMOEquipItem* Item = EquipmentSlots[SlotIndex];
+	UMMOEquipmentItem* Item = EquipmentSlots[SlotIndex];
 	EquipmentSlots[SlotIndex] = nullptr;
 	BP_UpdateEquipmentMesh(SlotIndex, nullptr);
 

@@ -12,6 +12,14 @@ struct FStarSystemData
 {
 	GENERATED_BODY()
 
+	bool operator==(const FStarSystemData& Other) const
+	{
+		return GalaxyID == Other.GalaxyID && SystemID == Other.SystemID
+			&& SystemName == Other.SystemName && PlanetNames == Other.PlanetNames
+			&& PlanetTypes == Other.PlanetTypes && StarType == Other.StarType
+			&& ResourceMultiplier == Other.ResourceMultiplier;
+	}
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Galaxy")
 	int32 GalaxyID = 1;
 

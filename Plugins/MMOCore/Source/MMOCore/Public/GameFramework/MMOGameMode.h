@@ -70,7 +70,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerLeft, AMMOPlayerController*
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnZonePopulationChanged, FName, ZoneID);
 
 UCLASS(Blueprintable, BlueprintType, config = Game)
-class MMCORE_API AMMOGameMode : public AGameModeBase
+class MMOCORE_API AMMOGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 
@@ -91,7 +91,7 @@ public:
 	virtual APlayerController* Login(UPlayer* NewPlayer, ENetRole InRemoteRole, const FString& Portal, const FString& Options, const FUniqueNetIdRepl& UniqueId, FString& ErrorMessage) override;
 	virtual void PostLogin(APlayerController* NewPlayer) override;
 	virtual void Logout(AController* Exiting) override;
-	virtual bool PlayerCanRestart(APlayerController* PlayerController) override;
+	bool PlayerCanRestart(APlayerController* PlayerController);
 	virtual void RestartPlayer(AController* NewPlayer) override;
 	virtual void RestartPlayerAtPlayerStart(AController* NewPlayer, AActor* StartSpot) override;
 	virtual AActor* FindPlayerStart_Implementation(AController* Player, const FString& IncomingName) override;

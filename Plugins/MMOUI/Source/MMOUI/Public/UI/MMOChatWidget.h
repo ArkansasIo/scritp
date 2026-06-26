@@ -127,7 +127,6 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Chat")
 	TArray<FMMOChatMessage> ChatHistory;
 
-	UPROPERTY(BlueprintReadOnly, Category = "Chat")
 	TMap<FString, TArray<EMMOWidgetChatChannel>> ChatTabs;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Chat")

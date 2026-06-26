@@ -96,8 +96,11 @@ enum class EResearchCategory : uint8
 	Warfare UMETA(DisplayName = "Warfare"),
 	Colonization UMETA(DisplayName = "Colonization"),
 	Economics UMETA(DisplayName = "Economics"),
-	Espionage UMETA(DisplayName = "Espionage")
+	Espionage UMETA(DisplayName = "Espionage"),
+	Count
 };
+
+ENUM_RANGE_BY_COUNT(EResearchCategory, static_cast<int32>(EResearchCategory::Count))
 
 UENUM(BlueprintType)
 enum class ECommanderRarity : uint8
@@ -133,6 +136,13 @@ struct FResourceSet
 {
 	GENERATED_BODY()
 
+	bool operator==(const FResourceSet& Other) const
+	{
+		return Metal == Other.Metal && Crystal == Other.Crystal && Deuterium == Other.Deuterium
+			&& Energy == Other.Energy && Food == Other.Food && Water == Other.Water
+			&& Credits == Other.Credits && DarkMatter == Other.DarkMatter;
+	}
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
 	double Metal = 0;
 
@@ -162,6 +172,12 @@ USTRUCT(BlueprintType)
 struct FGalaxyCoordinate
 {
 	GENERATED_BODY()
+
+	bool operator==(const FGalaxyCoordinate& Other) const
+	{
+		return Galaxy == Other.Galaxy && SolarSystem == Other.SolarSystem
+			&& Position == Other.Position && PlanetIndex == Other.PlanetIndex;
+	}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Galaxy")
 	int32 Galaxy = 1;
@@ -198,6 +214,13 @@ struct FShipStats
 {
 	GENERATED_BODY()
 
+	bool operator==(const FShipStats& Other) const
+	{
+		return StructuralIntegrity == Other.StructuralIntegrity && ShieldPower == Other.ShieldPower
+			&& WeaponPower == Other.WeaponPower && Speed == Other.Speed
+			&& CargoCapacity == Other.CargoCapacity && FuelConsumption == Other.FuelConsumption;
+	}
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 	double StructuralIntegrity = 0;
 
@@ -222,6 +245,12 @@ struct FBuildingLevel
 {
 	GENERATED_BODY()
 
+	bool operator==(const FBuildingLevel& Other) const
+	{
+		return Type == Other.Type && Level == Other.Level
+			&& bIsUpgrading == Other.bIsUpgrading && UpgradeEndTime == Other.UpgradeEndTime;
+	}
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building")
 	EBuildingType Type;
 
@@ -239,6 +268,12 @@ USTRUCT(BlueprintType)
 struct FResearchProgress
 {
 	GENERATED_BODY()
+
+	bool operator==(const FResearchProgress& Other) const
+	{
+		return Category == Other.Category && CurrentLevel == Other.CurrentLevel
+			&& bIsResearching == Other.bIsResearching && ResearchEndTime == Other.ResearchEndTime;
+	}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Research")
 	EResearchCategory Category;

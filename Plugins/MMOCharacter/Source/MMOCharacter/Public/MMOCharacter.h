@@ -5,7 +5,7 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(LogMMOCharacter, Log, All);
 
-class MMCHARACTER_API FMMOCharacterModule : public IModuleInterface
+class MMOCHARACTER_API FMMOCharacterModule : public IModuleInterface
 {
 public:
 	virtual void StartupModule() override;

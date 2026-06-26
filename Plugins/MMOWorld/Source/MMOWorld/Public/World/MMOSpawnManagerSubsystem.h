@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Subsystems/WorldSubsystem.h"
+#include "Containers/Ticker.h"
 #include "Engine/DataTable.h"
 #include "MMOSpawnManagerSubsystem.generated.h"
 
@@ -87,11 +88,11 @@ struct FMMOActiveSpawn
 	float RespawnTimeRemaining;
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnActorSpawned, FName, SpawnID, AActor*, SpawnedActor);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FMMOOnActorSpawned, FName, SpawnID, AActor*, SpawnedActor);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnActorDespawned, FName, SpawnID);
 
 UCLASS()
-class MMWORLD_API UMMOSpawnManagerSubsystem : public UWorldSubsystem
+class MMOWORLD_API UMMOSpawnManagerSubsystem : public UWorldSubsystem, public FTickableGameObject
 {
 	GENERATED_BODY()
 
@@ -100,6 +101,8 @@ public:
 	virtual void Deinitialize() override;
 	virtual void Tick(float DeltaTime) override;
 	virtual TStatId GetStatId() const override;
+	virtual bool IsTickable() const override { return true; }
+	virtual bool IsTickableInEditor() const override { return false; }
 
 	UFUNCTION(BlueprintCallable, Category = "Spawning")
 	void LoadSpawnDefinitions();
@@ -135,7 +138,7 @@ public:
 	void UnregisterSpawnPoint(FName SpawnID);
 
 	UPROPERTY(BlueprintAssignable, Category = "Events")
-	FOnActorSpawned OnActorSpawned;
+	FMMOOnActorSpawned OnActorSpawned;
 
 	UPROPERTY(BlueprintAssignable, Category = "Events")
 	FOnActorDespawned OnActorDespawned;
@@ -150,7 +153,6 @@ protected:
 	UPROPERTY()
 	TMap<FName, FMMOSpawnPoolEntry> SpawnPools;
 
-	UPROPERTY()
 	TMap<FName, TArray<FName>> SpawnGroups;
 
 	UPROPERTY()

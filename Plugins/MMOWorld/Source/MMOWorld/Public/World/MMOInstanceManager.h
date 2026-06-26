@@ -94,7 +94,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInstanceCompleted, FName, Instanc
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInstanceExpired, FName, InstanceID);
 
 UCLASS()
-class MMWORLD_API UMMOInstanceManager : public UWorldSubsystem
+class MMOWORLD_API UMMOInstanceManager : public UWorldSubsystem
 {
 	GENERATED_BODY()
 
@@ -160,7 +160,6 @@ protected:
 	UPROPERTY()
 	TMap<FName, FMMOInstanceInfo> ActiveInstances;
 
-	UPROPERTY()
 	TMap<FString, TArray<FMMOInstanceLockout>> PlayerLockouts;
 
 	UPROPERTY()

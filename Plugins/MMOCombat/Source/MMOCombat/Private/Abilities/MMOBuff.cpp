@@ -1,6 +1,7 @@
 #include "Abilities/MMOBuff.h"
 #include "Abilities/MMOBuffSystem.h"
 #include "GameFramework/Character.h"
+#include "Characters/MMOCharacterBase.h"
 
 UMMOBuff::UMMOBuff()
 {

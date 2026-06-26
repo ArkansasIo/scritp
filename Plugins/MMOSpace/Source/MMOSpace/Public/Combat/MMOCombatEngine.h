@@ -15,6 +15,16 @@ struct FCombatRoundResult
 {
 	GENERATED_BODY()
 
+	bool operator==(const FCombatRoundResult& Other) const
+	{
+		return Round == Other.Round && AttackerRemaining == Other.AttackerRemaining
+			&& DefenderRemaining == Other.DefenderRemaining
+			&& AttackerLosses == Other.AttackerLosses
+			&& DefenderLosses == Other.DefenderLosses
+			&& LootCaptured == Other.LootCaptured
+			&& ExplosiveRatio == Other.ExplosiveRatio;
+	}
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 	int32 Round = 0;
 
@@ -41,6 +51,15 @@ USTRUCT(BlueprintType)
 struct FCombatResult
 {
 	GENERATED_BODY()
+
+	bool operator==(const FCombatResult& Other) const
+	{
+		return BattleId == Other.BattleId && AttackerId == Other.AttackerId
+			&& DefenderId == Other.DefenderId && bAttackerWon == Other.bAttackerWon
+			&& TotalRounds == Other.TotalRounds && RoundResults == Other.RoundResults
+			&& TotalLoot == Other.TotalLoot && DebrisMetal == Other.DebrisMetal
+			&& DebrisCrystal == Other.DebrisCrystal && WinningFormation == Other.WinningFormation;
+	}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 	FString BattleId;

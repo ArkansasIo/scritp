@@ -105,7 +105,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Menu Manager")
 	void ClearHistory();
 
-	UFUNCTION(BlueprintCallable, Category = "Menu Manager")
 	void ShowModalDialog(const FText& Title, const FText& Message, FMMOModalCallback Callback);
 
 	UFUNCTION(BlueprintCallable, Category = "Menu Manager")

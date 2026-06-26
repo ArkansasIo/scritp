@@ -52,7 +52,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnPartyInviteReceived, const FStri
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnGuildInviteReceived, const FString&, GuildName, const FString&, GuildID);
 
 UCLASS(Blueprintable, BlueprintType, config = Game)
-class MMCORE_API AMMOPlayerController : public APlayerController
+class MMOCORE_API AMMOPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 

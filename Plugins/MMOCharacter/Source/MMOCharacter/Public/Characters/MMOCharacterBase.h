@@ -12,6 +12,7 @@ class UMMOCombatStateComponent;
 class UMMOInteractionComponent;
 class UAbilitySystemComponent;
 class UAnimInstance;
+struct FMMODamageResult;
 
 UENUM(BlueprintType)
 enum class EMMOCharacterState : uint8
@@ -36,7 +37,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnCharacterDeath);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnCharacterRespawn);
 
 UCLASS(Blueprintable, BlueprintType, Abstract)
-class MMCHARACTER_API AMMOCharacterBase : public ACharacter
+class MMOCHARACTER_API AMMOCharacterBase : public ACharacter
 {
 	GENERATED_BODY()
 
@@ -107,6 +108,12 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "MMO|Combat")
 	virtual void Respawn();
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "MMO|Combat")
+	void ReceiveDamage(const struct FMMODamageResult& DamageResult);
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "MMO|Combat")
+	void ReceiveHealing(float HealingAmount, AActor* Healer);
 
 	UFUNCTION(BlueprintCallable, Category = "MMO|Combat")
 	virtual void StartRespawnTimer(float RespawnDelay);

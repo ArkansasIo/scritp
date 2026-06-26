@@ -1,5 +1,5 @@
 #include "Abilities/MMODamageSystem.h"
-#include "MMOCharacterBase.h"
+#include "Characters/MMOCharacterBase.h"
 #include "GameFramework/Character.h"
 #include "Engine/World.h"
 #include "TimerManager.h"

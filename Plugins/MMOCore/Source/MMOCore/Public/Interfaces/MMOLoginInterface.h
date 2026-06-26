@@ -12,44 +12,34 @@ DECLARE_DYNAMIC_DELEGATE_ThreeParams(FOnCharacterCreated, bool, bSuccess, const 
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FOnCharacterDeleted, bool, bSuccess, const FString&, ErrorMessage);
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FOnCharacterSelected, bool, bSuccess, const FString&, ErrorMessage);
 
-UINTERFACE(BlueprintType, meta = (CannotImplementInterfaceInBlueprint = false))
-class MMCORE_API UMMOLoginInterface : public UInterface
+UINTERFACE()
+class MMOCORE_API UMMOLoginInterface : public UInterface
 {
 	GENERATED_BODY()
 };
 
-class MMCORE_API IMMOLoginInterface
+class MMOCORE_API IMMOLoginInterface
 {
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "MMO|Login")
-	void Login(const FString& Username, const FString& Password, FOnLoginComplete OnComplete);
+	virtual void Login(const FString& Username, const FString& Password, FOnLoginComplete OnComplete) = 0;
 
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "MMO|Login")
-	void Logout(FOnLogoutComplete OnComplete);
+	virtual void Logout(FOnLogoutComplete OnComplete) = 0;
 
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "MMO|Login")
-	void CreateAccount(const FString& Username, const FString& Password, const FString& Email, FOnCreateAccountComplete OnComplete);
+	virtual void CreateAccount(const FString& Username, const FString& Password, const FString& Email, FOnCreateAccountComplete OnComplete) = 0;
 
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "MMO|Login")
-	void GetCharacterList(FOnCharacterListReceived OnComplete);
+	virtual void GetCharacterList(FOnCharacterListReceived OnComplete) = 0;
 
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "MMO|Login")
-	void CreateCharacter(const FString& CharacterName, const FString& ClassName, FOnCharacterCreated OnComplete);
+	virtual void CreateCharacter(const FString& CharacterName, const FString& ClassName, FOnCharacterCreated OnComplete) = 0;
 
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "MMO|Login")
-	void DeleteCharacter(const FString& CharacterID, FOnCharacterDeleted OnComplete);
+	virtual void DeleteCharacter(const FString& CharacterID, FOnCharacterDeleted OnComplete) = 0;
 
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "MMO|Login")
-	void SelectCharacter(const FString& CharacterID, FOnCharacterSelected OnComplete);
+	virtual void SelectCharacter(const FString& CharacterID, FOnCharacterSelected OnComplete) = 0;
 
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "MMO|Login")
-	bool IsLoggedIn() const;
+	virtual bool IsLoggedIn() const = 0;
 
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "MMO|Login")
-	FString GetLoggedInAccountID() const;
+	virtual FString GetLoggedInAccountID() const = 0;
 
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "MMO|Login")
-	FString GetLoggedInUsername() const;
+	virtual FString GetLoggedInUsername() const = 0;
 };

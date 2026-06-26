@@ -160,7 +160,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPartyFinderListingAddedDelegate, 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPartyFinderListingRemovedDelegate, const FString&, ListingId);
 
 UCLASS(BlueprintType)
-class MMPARTY_API UMMOPartySubsystem : public UWorldSubsystem
+class MMOPARTY_API UMMOPartySubsystem : public UWorldSubsystem
 {
 	GENERATED_BODY()
 

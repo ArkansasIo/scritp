@@ -14,6 +14,11 @@ struct FFleetUnit
 {
 	GENERATED_BODY()
 
+	bool operator==(const FFleetUnit& Other) const
+	{
+		return ShipClass == Other.ShipClass && Count == Other.Count && Stats == Other.Stats;
+	}
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Fleet")
 	EShipClass ShipClass;
 
@@ -28,6 +33,17 @@ USTRUCT(BlueprintType)
 struct FFleetData
 {
 	GENERATED_BODY()
+
+	bool operator==(const FFleetData& Other) const
+	{
+		return FleetId == Other.FleetId && OwnerId == Other.OwnerId && FleetName == Other.FleetName
+			&& Units == Other.Units && Origin == Other.Origin && Destination == Other.Destination
+			&& CurrentPosition == Other.CurrentPosition && DepartureTime == Other.DepartureTime
+			&& ArrivalTime == Other.ArrivalTime && ReturnTime == Other.ReturnTime
+			&& Speed == Other.Speed && Formation == Other.Formation
+			&& bIsReturning == Other.bIsReturning && bIsActive == Other.bIsActive
+			&& MissionType == Other.MissionType && Loot == Other.Loot;
+	}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Fleet")
 	FString FleetId;

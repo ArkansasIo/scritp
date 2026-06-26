@@ -10,11 +10,11 @@ UMMOCombatTextManager::UMMOCombatTextManager()
 	PhysicalColor = FLinearColor::White;
 	MagicColor = FLinearColor::Blue;
 	FireColor = FLinearColor::Red;
-	FrostColor = FLinearColor::Cyan;
+	FrostColor = FLinearColor(0.0f, 1.0f, 1.0f);
 	NatureColor = FLinearColor::Green;
-	ShadowColor = FLinearColor::Purple;
+	ShadowColor = FLinearColor(0.5f, 0.0f, 0.5f);
 	HolyColor = FLinearColor::Yellow;
-	ArcaneColor = FLinearColor::Magenta;
+	ArcaneColor = FLinearColor(1.0f, 0.0f, 1.0f);
 }
 
 void UMMOCombatTextManager::BeginPlay()

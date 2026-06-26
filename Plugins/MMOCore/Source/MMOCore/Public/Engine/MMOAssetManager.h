@@ -20,11 +20,11 @@ struct FMMOAssetBundle
 	TArray<FPrimaryAssetId> AssetIDs;
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAssetsLoaded, const TArray<FPrimaryAssetId>&, LoadedAssets);
+DECLARE_DYNAMIC_DELEGATE_OneParam(FOnAssetsLoaded, const TArray<FPrimaryAssetId>&, LoadedAssets);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAssetLoadFailed, const FString&, ErrorMessage);
 
 UCLASS(Blueprintable, BlueprintType, config = Game)
-class MMCORE_API UMMOAssetManager : public UAssetManager
+class MMOCORE_API UMMOAssetManager : public UAssetManager
 {
 	GENERATED_BODY()
 
@@ -82,10 +82,8 @@ public:
 	UFUNCTION(BlueprintPure, Category = "MMO|AssetManager")
 	bool IsDataLoaded() const { return bDataLoaded; }
 
-	UFUNCTION(BlueprintCallable, Category = "MMO|AssetManager", meta = (AdvancedDisplay = "3"))
 	void AsyncLoadPrimaryAsset(FPrimaryAssetId AssetId, const TArray<FName>& LoadBundles, FOnAssetsLoaded OnLoaded);
 
-	UFUNCTION(BlueprintCallable, Category = "MMO|AssetManager", meta = (AdvancedDisplay = "3"))
 	void AsyncLoadPrimaryAssets(const TArray<FPrimaryAssetId>& AssetIds, const TArray<FName>& LoadBundles, FOnAssetsLoaded OnLoaded);
 
 	void RegisterPrimaryAssetType(FPrimaryAssetTypeInfo TypeInfo);
@@ -98,7 +96,7 @@ public:
 
 protected:
 	virtual void StartInitialLoading() override;
-	virtual void PostInitialLoadComplete() override;
+
 
 	UPROPERTY(BlueprintReadOnly, Category = "MMO|AssetManager")
 	TMap<FName, FMMOAssetBundle> RegisteredBundles;

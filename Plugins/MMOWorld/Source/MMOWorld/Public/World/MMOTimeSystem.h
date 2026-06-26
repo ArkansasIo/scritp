@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Subsystems/WorldSubsystem.h"
+#include "Containers/Ticker.h"
 #include "MMOTimeSystem.generated.h"
 
 USTRUCT(BlueprintType)
@@ -61,7 +62,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDailyReset);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnWeeklyReset);
 
 UCLASS()
-class MMWORLD_API UMMOTimeSystem : public UWorldSubsystem
+class MMOWORLD_API UMMOTimeSystem : public UWorldSubsystem, public FTickableGameObject
 {
 	GENERATED_BODY()
 
@@ -70,6 +71,8 @@ public:
 	virtual void Deinitialize() override;
 	virtual void Tick(float DeltaTime) override;
 	virtual TStatId GetStatId() const override;
+	virtual bool IsTickable() const override { return true; }
+	virtual bool IsTickableInEditor() const override { return false; }
 
 	UFUNCTION(BlueprintCallable, Category = "Time")
 	float GetTimeOfDay() const { return CurrentTime.TimeOfDay; }

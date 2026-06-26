@@ -10,7 +10,7 @@
 #include "MMOWorldSubsystem.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnZoneTransferRequest, APlayerController*, Player, FName, TargetZoneID);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnZonePopulationChanged, FName, ZoneID, int32, NewPopulation, int32, Capacity);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FMMOOnZonePopulationChanged, FName, ZoneID, int32, NewPopulation, int32, Capacity);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnZoneAvailabilityChanged, FName, ZoneID, bool, bAvailable);
 
 USTRUCT(BlueprintType)
@@ -41,14 +41,13 @@ struct FMMOActiveZoneInfo
 };
 
 UCLASS()
-class MMWORLD_API UMMOWorldSubsystem : public UWorldSubsystem
+class MMOWORLD_API UMMOWorldSubsystem : public UWorldSubsystem
 {
 	GENERATED_BODY()
 
 public:
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 	virtual void Deinitialize() override;
-	virtual TStatId GetStatId() const override;
 
 	UFUNCTION(BlueprintCallable, Category = "Zone")
 	void LoadZoneDefinitions();
@@ -102,7 +101,7 @@ public:
 	FOnZoneTransferRequest OnZoneTransferRequest;
 
 	UPROPERTY(BlueprintAssignable, Category = "Events")
-	FOnZonePopulationChanged OnZonePopulationChanged;
+	FMMOOnZonePopulationChanged OnZonePopulationChanged;
 
 	UPROPERTY(BlueprintAssignable, Category = "Events")
 	FOnZoneAvailabilityChanged OnZoneAvailabilityChanged;

@@ -16,7 +16,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnObjectiveUpdated, UMMOQuestBas
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnQuestTrackedChanged, UMMOQuestBase*, Quest, bool, bTracked);
 
 USTRUCT(BlueprintType)
-struct MMQUEST_API FMMOActiveQuestState
+struct MMOQUEST_API FMMOActiveQuestState
 {
 	GENERATED_BODY()
 
@@ -55,7 +55,7 @@ struct MMQUEST_API FMMOActiveQuestState
 };
 
 USTRUCT(BlueprintType)
-struct MMQUEST_API FMMOCompletedQuestEntry
+struct MMOQUEST_API FMMOCompletedQuestEntry
 {
 	GENERATED_BODY()
 
@@ -69,8 +69,18 @@ struct MMQUEST_API FMMOCompletedQuestEntry
 	double LastCompletedTime = 0.0;
 };
 
+UENUM(BlueprintType)
+enum class EQuestGiverStatus : uint8
+{
+	None			UMETA(DisplayName = "None"),
+	Available		UMETA(DisplayName = "Available"),
+	InProgress		UMETA(DisplayName = "In Progress"),
+	Completed		UMETA(DisplayName = "Completed"),
+	NotAvailable	UMETA(DisplayName = "Not Available")
+};
+
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
-class MMQUEST_API UMMOQuestComponent : public UActorComponent
+class MMOQUEST_API UMMOQuestComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
@@ -164,7 +174,7 @@ public:
 	bool IsQuestOnCooldown(const UMMOQuestBase* Quest) const;
 
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Quest Reward")
-	void GrantQuestRewards(UMMOQuestBase* Quest, int32 ChoiceIndex = INDEX_NONE);
+	void GrantQuestRewards(UMMOQuestBase* Quest, int32 ChoiceIndex);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Quest Objectives")
 	void ProgressObjective(FGameplayTag QuestID, FGameplayTag TargetID, int32 Amount = 1);
@@ -206,14 +216,4 @@ protected:
 
 	UPROPERTY(Replicated)
 	FGameplayTag TrackedQuestID;
-};
-
-UENUM(BlueprintType)
-enum class EQuestGiverStatus : uint8
-{
-	None			UMETA(DisplayName = "None"),
-	Available		UMETA(DisplayName = "Available"),
-	InProgress		UMETA(DisplayName = "In Progress"),
-	Completed		UMETA(DisplayName = "Completed"),
-	NotAvailable	UMETA(DisplayName = "Not Available")
 };

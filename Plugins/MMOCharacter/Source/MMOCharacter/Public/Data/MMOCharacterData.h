@@ -174,7 +174,7 @@ struct FMMOStartingEquipment
 };
 
 UCLASS(BlueprintType)
-class MMCHARACTER_API UMMOCharacterDataAsset : public UDataAsset
+class MMOCHARACTER_API UMMOCharacterDataAsset : public UDataAsset
 {
 	GENERATED_BODY()
 
@@ -194,12 +194,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equipment")
 	TMap<FName, FVector> StartingLocations;
 
-	UFUNCTION(BlueprintCallable, Category = "MMO|Data")
 	FMMORaceDefinition* GetRaceDefinition(FName RaceID);
 
-	UFUNCTION(BlueprintCallable, Category = "MMO|Data")
 	FMMOClassDefinition* GetClassDefinition(FName ClassID);
 
-	UFUNCTION(BlueprintCallable, Category = "MMO|Data")
 	FMMOStartingEquipment* GetStartingEquipment(FName Key);
 };

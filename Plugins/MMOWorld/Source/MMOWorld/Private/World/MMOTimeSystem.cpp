@@ -139,7 +139,7 @@ void UMMOTimeSystem::SyncTimeFromServer(const FMMOGameTime& ServerTime)
 
 void UMMOTimeSystem::AdvanceTime(float DeltaTime)
 {
-	if (!bServerAuthoritative && GetWorld() && !GetWorld()->IsServer())
+	if (!bServerAuthoritative && GetWorld() && GetWorld()->GetNetMode() != NM_DedicatedServer && GetWorld()->GetNetMode() != NM_ListenServer)
 	{
 		return;
 	}

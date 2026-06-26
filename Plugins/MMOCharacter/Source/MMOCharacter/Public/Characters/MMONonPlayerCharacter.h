@@ -34,7 +34,7 @@ enum class EMMOQuestIndicator : uint8
 };
 
 UCLASS(Blueprintable, BlueprintType)
-class MMCHARACTER_API AMMONonPlayerCharacter : public AMMOCharacterBase
+class MMOCHARACTER_API AMMONonPlayerCharacter : public AMMOCharacterBase
 {
 	GENERATED_BODY()
 

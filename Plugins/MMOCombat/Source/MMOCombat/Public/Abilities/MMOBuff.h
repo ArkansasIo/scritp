@@ -4,6 +4,7 @@
 #include "UObject/NoExportTypes.h"
 #include "GameplayTagContainer.h"
 #include "Engine/Texture2D.h"
+#include "Abilities/MMODamageSystem.h"
 #include "MMOBuff.generated.h"
 
 class AMMOCharacterBase;

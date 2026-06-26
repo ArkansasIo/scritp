@@ -8,7 +8,7 @@
 #include "MMOInventoryComponent.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnEquipmentChanged, EMMOEquipmentSlot, Slot, const FItemInstance&, Item, bool, bEquipped);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnCurrencyChanged, int32, NewGold, int32, NewSilver);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnCurrencyChanged, int32, NewGold, int32, NewSilver, int32, NewCopper);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnWeightChanged);
 
 class UMMOItemContainer;
@@ -31,7 +31,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Inventory")
 	UMMOItemContainer* BankContainer;
 
-	UPROPERTY(ReplicatedUsing = OnRep_Equipment, EditAnywhere, BlueprintReadOnly, Category = "Equipment")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Equipment")
 	TMap<EMMOEquipmentSlot, FItemInstance> EquipmentSlots;
 
 	UPROPERTY(ReplicatedUsing = OnRep_Currency, EditAnywhere, BlueprintReadWrite, Category = "Currency")

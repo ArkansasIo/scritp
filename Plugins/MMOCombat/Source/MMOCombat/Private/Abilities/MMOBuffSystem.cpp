@@ -2,7 +2,7 @@
 #include "Abilities/MMOBuff.h"
 #include "Net/UnrealNetwork.h"
 #include "Engine/World.h"
-#include "MMOCharacterBase.h"
+#include "Characters/MMOCharacterBase.h"
 
 UMMOBuffSystemComponent::UMMOBuffSystemComponent()
 {
@@ -27,7 +27,7 @@ void UMMOBuffSystemComponent::TickComponent(float DeltaTime, ELevelTick TickType
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if (!HasAuthority())
+	if (GetNetMode() == NM_Client)
 	{
 		return;
 	}
@@ -67,7 +67,7 @@ void UMMOBuffSystemComponent::OnRep_ActiveBuffs()
 
 UMMOBuff* UMMOBuffSystemComponent::ApplyBuff(TSubclassOf<UMMOBuff> BuffClass, AActor* Source, AActor* Target)
 {
-	if (!BuffClass || !Target || !HasAuthority())
+	if (!BuffClass || !Target || GetNetMode() == NM_Client)
 	{
 		return nullptr;
 	}

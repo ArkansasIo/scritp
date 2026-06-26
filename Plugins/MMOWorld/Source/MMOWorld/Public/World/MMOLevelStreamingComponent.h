@@ -40,7 +40,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnLevelUnloadRequested, TSoftObject
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnLevelStreamingStateChanged, TSoftObjectPtr<UWorld>, Level, bool, bLoaded);
 
 UCLASS(ClassGroup=(MMO), meta=(BlueprintSpawnableComponent))
-class MMWORLD_API UMMOLevelStreamingComponent : public UActorComponent
+class MMOWORLD_API UMMOLevelStreamingComponent : public UActorComponent
 {
 	GENERATED_BODY()
 

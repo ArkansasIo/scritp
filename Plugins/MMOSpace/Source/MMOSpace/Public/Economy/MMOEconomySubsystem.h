@@ -49,6 +49,15 @@ struct FMarketOrder
 {
 	GENERATED_BODY()
 
+	bool operator==(const FMarketOrder& Other) const
+	{
+		return OrderId == Other.OrderId && PlayerId == Other.PlayerId
+			&& bIsBuyOrder == Other.bIsBuyOrder && ResourceOffered == Other.ResourceOffered
+			&& AmountOffered == Other.AmountOffered && ResourceRequested == Other.ResourceRequested
+			&& AmountRequested == Other.AmountRequested && PricePerUnit == Other.PricePerUnit
+			&& CreatedAt == Other.CreatedAt && bIsActive == Other.bIsActive;
+	}
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Market")
 	FString OrderId;
 

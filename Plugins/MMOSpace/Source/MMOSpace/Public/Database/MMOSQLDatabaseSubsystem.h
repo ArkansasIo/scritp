@@ -13,6 +13,17 @@ struct FPlayerSaveData
 {
 	GENERATED_BODY()
 
+	bool operator==(const FPlayerSaveData& Other) const
+	{
+		return PlayerId == Other.PlayerId && Username == Other.Username
+			&& Resources == Other.Resources && Buildings == Other.Buildings
+			&& Research == Other.Research && EmpireLevel == Other.EmpireLevel
+			&& EmpireExperience == Other.EmpireExperience && PrestigeLevel == Other.PrestigeLevel
+			&& HomeWorld == Other.HomeWorld && PlanetName == Other.PlanetName
+			&& LastResourceUpdate == Other.LastResourceUpdate && LastTurnUpdate == Other.LastTurnUpdate
+			&& CurrentTurns == Other.CurrentTurns && Government == Other.Government;
+	}
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Save")
 	FString PlayerId;
 

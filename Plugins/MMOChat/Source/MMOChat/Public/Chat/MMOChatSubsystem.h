@@ -2,20 +2,21 @@
 
 #include "CoreMinimal.h"
 #include "Subsystems/WorldSubsystem.h"
-#include "Chat/MMOChatMessage.h"
 #include "Chat/MMOEmoteSystem.h"
+#include "GameFramework/MMOPlayerController.h"
 #include "MMOChatSubsystem.generated.h"
 
+struct FMMOChatMessage;
 class APlayerController;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnChatMessageReceived, const FMMOChatMessage&, Message);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMMOChatMessageReceived, const FMMOChatMessage&, Message);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnChatChannelJoined, EMMOChatChannel, Channel, const FString&, CustomName);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnChatChannelLeft, EMMOChatChannel, Channel, const FString&, CustomName);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnPlayerMuted, const FString&, PlayerName, bool, bIsMuted);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSystemMessage, const FString&, Message);
 
 USTRUCT(BlueprintType)
-struct MMCHAT_API FMMOChatChannelInfo
+struct MMOCHAT_API FMMOChatChannelInfo
 {
     GENERATED_BODY()
 
@@ -42,7 +43,7 @@ struct MMCHAT_API FMMOChatChannelInfo
 };
 
 USTRUCT(BlueprintType)
-struct MMCHAT_API FMMOChatRateLimitEntry
+struct MMOCHAT_API FMMOChatRateLimitEntry
 {
     GENERATED_BODY()
 
@@ -78,7 +79,7 @@ DECLARE_DELEGATE_OneParam(FMMOChatServerSendDelegate, const FMMOChatMessage&);
 DECLARE_DELEGATE_OneParam(FMMOChatClientReceiveDelegate, const FMMOChatMessage&);
 
 UCLASS(BlueprintType, DisplayName = "MMO Chat Subsystem")
-class MMCHAT_API UMMOChatSubsystem : public UWorldSubsystem
+class MMOCHAT_API UMMOChatSubsystem : public UWorldSubsystem
 {
     GENERATED_BODY()
 
@@ -88,7 +89,7 @@ public:
     virtual bool DoesSupportWorldType(EWorldType::Type WorldType) const override;
 
     UPROPERTY(BlueprintAssignable, Category = "Chat|Events")
-    FOnChatMessageReceived OnChatMessageReceived;
+	FOnMMOChatMessageReceived OnChatMessageReceived;
 
     UPROPERTY(BlueprintAssignable, Category = "Chat|Events")
     FOnChatChannelJoined OnChatChannelJoined;
@@ -202,11 +203,9 @@ protected:
     UPROPERTY(EditDefaultsOnly, Category = "Chat|Config")
     float ChatRangeYell;
 
-    UPROPERTY()
-    TMap<EMMOChatChannel, TArray<FMMOChatMessage>> ChannelHistory;
+	TMap<EMMOChatChannel, TArray<FMMOChatMessage>> ChannelHistory;
 
-    UPROPERTY()
-    TMap<FString, TArray<FMMOChatMessage>> CustomChannelHistory;
+	TMap<FString, TArray<FMMOChatMessage>> CustomChannelHistory;
 
     UPROPERTY()
     TMap<FString, FMMOChatChannelInfo> CustomChannels;

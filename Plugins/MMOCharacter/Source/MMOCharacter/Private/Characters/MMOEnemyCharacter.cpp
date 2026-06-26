@@ -55,9 +55,9 @@ void AMMOEnemyCharacter::BeginPlay()
 
 	InitializeEnemyData();
 
-	if (AIControllerClass && !GetController())
+	if (EnemyAIControllerClass && !GetController())
 	{
-		AIController = GetWorld()->SpawnActor<AAIController>(AIControllerClass, GetActorLocation(), GetActorRotation());
+		AIController = GetWorld()->SpawnActor<AAIController>(EnemyAIControllerClass, GetActorLocation(), GetActorRotation());
 		if (AIController)
 		{
 			AIController->Possess(this);
@@ -180,7 +180,7 @@ void AMMOEnemyCharacter::StartRespawn()
 	}
 
 	FTimerManager& TimerManager = GetWorldTimerManager();
-	TimerManager.SetTimer(RespawnTimerHandle, this, &AMMOEnemyCharacter::OnRespawnComplete, RespawnTime, false);
+	TimerManager.SetTimer(EnemyRespawnTimerHandle, this, &AMMOEnemyCharacter::OnRespawnComplete, RespawnTime, false);
 }
 
 void AMMOEnemyCharacter::OnRespawnComplete()

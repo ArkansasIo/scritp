@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Subsystems/WorldSubsystem.h"
+#include "Containers/Ticker.h"
 #include "MMOZoneData.h"
 #include "MMOWeatherSystem.generated.h"
 
@@ -51,7 +52,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnWeatherChanged, FName, ZoneID,
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnWeatherBlendProgress, FName, ZoneID, float, Progress);
 
 UCLASS()
-class MMWORLD_API UMMOWeatherSystem : public UWorldSubsystem
+class MMOWORLD_API UMMOWeatherSystem : public UWorldSubsystem, public FTickableGameObject
 {
 	GENERATED_BODY()
 
@@ -60,6 +61,8 @@ public:
 	virtual void Deinitialize() override;
 	virtual void Tick(float DeltaTime) override;
 	virtual TStatId GetStatId() const override;
+	virtual bool IsTickable() const override { return true; }
+	virtual bool IsTickableInEditor() const override { return false; }
 
 	UFUNCTION(BlueprintCallable, Category = "Weather")
 	void SetWeather(FName ZoneID, EMMOWeatherType NewWeather, float BlendDuration = 3.0f, float Intensity = 1.0f);
@@ -104,7 +107,6 @@ protected:
 	UPROPERTY()
 	TMap<FName, FMMOWeatherState> ZoneWeatherStates;
 
-	UPROPERTY()
 	TMap<FName, TArray<FMMOWeatherCycleEntry>> WeatherCycles;
 
 	UPROPERTY()

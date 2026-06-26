@@ -25,7 +25,6 @@ void UMMOInventoryComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(UMMOInventoryComponent, EquipmentSlots);
 	DOREPLIFETIME(UMMOInventoryComponent, Gold);
 	DOREPLIFETIME(UMMOInventoryComponent, Silver);
 	DOREPLIFETIME(UMMOInventoryComponent, Copper);

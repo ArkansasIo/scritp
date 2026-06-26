@@ -202,13 +202,13 @@ void UMMOLevelStreamingComponent::EvaluateLevelDistance(const FVector& PlayerLoc
 
 		LevelInfo->Distance = 0.0f;
 
-		FLatentActionInfo LatentInfo;
+		bool bOutSuccess = false;
 		ULevelStreamingDynamic* StreamingLevel = ULevelStreamingDynamic::LoadLevelInstanceBySoftObjectPtr(
 			GetOwner(),
 			Level,
 			FVector::ZeroVector,
 			FRotator::ZeroRotator,
-			LatentInfo
+			bOutSuccess
 		);
 
 		if (StreamingLevel)
@@ -240,18 +240,14 @@ void UMMOLevelStreamingComponent::LoadLevelAsync(TSoftObjectPtr<UWorld> Level)
 		return;
 	}
 
-	FLatentActionInfo LatentInfo;
-	LatentInfo.CallbackTarget = this;
-	LatentInfo.ExecutionFunction = TEXT("OnLevelLoaded");
-	LatentInfo.UUID = GetUniqueID();
-	LatentInfo.Linkage = 0;
+	bool bOutSuccess = false;
 
 	ULevelStreamingDynamic::LoadLevelInstanceBySoftObjectPtr(
 		GetOwner(),
 		Level,
 		FVector::ZeroVector,
 		FRotator::ZeroRotator,
-		LatentInfo
+		bOutSuccess
 	);
 
 	if (FMMONearbyLevelInfo* LevelInfo = NearbyLevels.Find(Level))
