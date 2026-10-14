@@ -1,0 +1,34 @@
+# Unreal Engine generated output
+Binaries/
+DerivedDataCache/
+Intermediate/
+Saved/
+.vs/
+*.sln
+*.suo
+*.user
+*.opensdf
+*.sdf
+*.VC.db
+*.VC.VC.opendb
+
+# Local/editor configuration
+.idea/
+.vscode/
+*.code-workspace
+
+# Logs and temporary files
+*.log
+*.tmp
+*.bak
+*.old
+Thumbs.db
+.DS_Store
+
+# Local environment overrides and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
