@@ -1,149 +1,133 @@
+[CmdletBinding()]
 param(
+    [string]$InstallPath,
     [switch]$Quiet,
     [switch]$SkipInstall
 )
 
-$ErrorActionPreference = "Continue"
-$Host.UI.RawUI.WindowTitle = "VS 2026 Setup for UE 5.8"
+Set-StrictMode -Version Latest
+$ErrorActionPreference = "Stop"
 
-$vsInstallPath = "C:\Program Files\Microsoft Visual Studio\18\Community"
-$vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
-$vsSetup = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\setup.exe"
-$workloads = @(
-    "Microsoft.VisualStudio.Workload.NativeGame",
-    "Microsoft.VisualStudio.Workload.NativeDesktop"
-)
-$components = @(
-    "Microsoft.VisualStudio.Component.VC.Tools.x86.x64",
-    "Microsoft.VisualStudio.Component.VC.CMake.Project"
-)
-
-Write-Host "=== Visual Studio 2026 Setup for UE 5.8 ===" -ForegroundColor Cyan
-Write-Host ""
-
-Write-Host "[1/5] Checking Visual Studio installation..." -ForegroundColor Yellow
-if (-not (Test-Path $vswhere)) {
-    Write-Host "ERROR: Visual Studio Installer not found" -ForegroundColor Red
-    Write-Host "Download from: https://visualstudio.microsoft.com/" -ForegroundColor Red
-    exit 1
+function Write-Status {
+    param(
+        [Parameter(Mandatory)][string]$Message,
+        [ConsoleColor]$Color = [ConsoleColor]::Gray
+    )
+    Write-Host $Message -ForegroundColor $Color
 }
 
-$vsInfo = & $vswhere -products Microsoft.VisualStudio.Product.Community -format json 2>$null | ConvertFrom-Json
-if (-not $vsInfo) {
-    Write-Host "  Visual Studio Community not installed" -ForegroundColor Yellow
-    $installed = $false
-} else {
-    Write-Host "  Found: $($vsInfo.displayName) v$($vsInfo.installationVersion)" -ForegroundColor Green
-    Write-Host "  Path: $($vsInfo.installationPath)" -ForegroundColor Green
-    $installed = $true
-    $vsInstallPath = $vsInfo.installationPath
-}
+try {
+    $programFilesX86 = [Environment]::GetFolderPath('ProgramFilesX86')
+    $vswhere = Join-Path $programFilesX86 "Microsoft Visual Studio\Installer\vswhere.exe"
+    $vsSetup = Join-Path $programFilesX86 "Microsoft Visual Studio\Installer\setup.exe"
 
-Write-Host "[2/5] Checking C++ toolchain..." -ForegroundColor Yellow
-$msvcDir = "$vsInstallPath\VC\Tools\MSVC"
-$hasMsvc = (Test-Path $msvcDir) -and ((Get-ChildItem $msvcDir -ErrorAction SilentlyContinue).Count -gt 0)
+    Write-Status "=== Visual Studio C++ Toolchain Check ===" Cyan
 
-if ($hasMsvc) {
-    $msvcVer = (Get-ChildItem $msvcDir -ErrorAction SilentlyContinue | Select-Object -First 1).Name
-    Write-Host "  MSVC $msvcVer - OK" -ForegroundColor Green
-} else {
-    Write-Host "  MSVC toolchain not installed" -ForegroundColor Yellow
-}
+    if (-not (Test-Path -LiteralPath $vswhere -PathType Leaf)) {
+        throw "vswhere.exe was not found at '$vswhere'. Install Visual Studio Installer or repair the Visual Studio installation."
+    }
 
-if (-not $SkipInstall) {
-    Write-Host "[3/5] Checking required workloads..." -ForegroundColor Yellow
-    $needsWorkloads = -not $hasMsvc
+    $instanceJson = & $vswhere -all -products '*' -format json
+    $instances = @($instanceJson | ConvertFrom-Json)
+    if ($InstallPath) {
+        $selected = $instances | Where-Object { $_.installationPath -ieq $InstallPath } | Select-Object -First 1
+        if (-not $selected) {
+            throw "No Visual Studio instance found at '$InstallPath'."
+        }
+    } else {
+        $selected = $instances |
+            Where-Object { $_.isComplete -and $_.isLaunchable } |
+            Sort-Object installationVersion -Descending |
+            Select-Object -First 1
+        if (-not $selected) {
+            $selected = $instances | Where-Object { $_.isComplete } | Select-Object -First 1
+        }
+    }
 
-    if ($needsWorkloads) {
-        Write-Host "  Missing C++/Game dev workloads - starting installation..." -ForegroundColor Yellow
-        Write-Host "  Workloads: $($workloads -join ', ')" -ForegroundColor Gray
+    if (-not $selected) {
+        throw "No Visual Studio instance was detected. Install Visual Studio and the C++ game development workload, then rerun this check."
+    }
 
-        $admin = [System.Security.Principal.WindowsIdentity]::GetCurrent().Groups -contains 'S-1-5-32-544'
-        if (-not $admin) {
-            Write-Host ""
-            Write-Host "  NOTE: Installation requires Administrator privileges." -ForegroundColor Yellow
-            Write-Host "  A UAC prompt will appear if you proceed." -ForegroundColor Yellow
-            Write-Host ""
+    $vsInstallPath = $selected.installationPath
+    Write-Status "Detected: $($selected.displayName) $($selected.installationVersion)" Green
+    Write-Status "Path: $vsInstallPath" Gray
+
+    $msvcDir = Join-Path $vsInstallPath "VC\Tools\MSVC"
+    $msvcVersions = @()
+    if (Test-Path -LiteralPath $msvcDir -PathType Container) {
+        $msvcVersions = @(Get-ChildItem -LiteralPath $msvcDir -Directory -ErrorAction SilentlyContinue)
+    }
+    if ($msvcVersions.Count -gt 0) {
+        Write-Status "MSVC toolchain versions: $($msvcVersions.Name -join ', ')" Green
+    } else {
+        Write-Status "MSVC toolchain not detected." Yellow
+    }
+
+    $requiredPaths = @(
+        (Join-Path $vsInstallPath "MSBuild\Current\Bin\MSBuild.exe"),
+        (Join-Path $vsInstallPath "VC\Auxiliary\Build\vcvars64.bat")
+    )
+    $missingPaths = @($requiredPaths | Where-Object { -not (Test-Path -LiteralPath $_ -PathType Leaf) })
+    if ($missingPaths.Count -gt 0) {
+        Write-Status "Some expected C++ build files are missing:" Yellow
+        $missingPaths | ForEach-Object { Write-Status "  $_" Yellow }
+    } else {
+        Write-Status "MSBuild and x64 compiler environment scripts found." Green
+    }
+
+    if (-not $SkipInstall -and ($msvcVersions.Count -eq 0 -or $missingPaths.Count -gt 0)) {
+        if (-not (Test-Path -LiteralPath $vsSetup -PathType Leaf)) {
+            throw "Visual Studio setup executable not found at '$vsSetup'. Use Visual Studio Installer manually."
         }
 
-        $addArgs = @()
-        foreach ($wl in $workloads) { $addArgs += "--add"; $addArgs += $wl }
-        foreach ($comp in $components) { $addArgs += "--add"; $addArgs += $comp }
+        $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
+        $principal = [Security.Principal.WindowsPrincipal]::new($identity)
+        if (-not $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+            throw "Installing Visual Studio workloads requires an elevated PowerShell session. Re-run as Administrator or install the workload manually."
+        }
 
+        $addArgs = @(
+            "modify",
+            "--installPath", $vsInstallPath,
+            "--add", "Microsoft.VisualStudio.Workload.NativeGame",
+            "--add", "Microsoft.VisualStudio.Workload.NativeDesktop",
+            "--add", "Microsoft.VisualStudio.Component.VC.Tools.x86.x64",
+            "--add", "Microsoft.VisualStudio.Component.VC.CMake.Project",
+            "--includeRecommended",
+            "--norestart"
+        )
         if ($Quiet) {
             $addArgs += "--quiet"
-            $addArgs += "--norestart"
         } else {
             $addArgs += "--passive"
-            $addArgs += "--norestart"
         }
-        $addArgs += "--installPath"
-        $addArgs += $vsInstallPath
-        $addArgs += "--includeRecommended"
 
-        Write-Host "  Running: setup.exe modify ..." -ForegroundColor Gray
-        Write-Host "  (This will download several GB - may take a while)" -ForegroundColor Yellow
-        Write-Host ""
-
-        $proc = Start-Process -FilePath $vsSetup -ArgumentList $addArgs -Wait -PassThru -NoNewWindow:$false
-        if ($proc.ExitCode -eq 0 -or $proc.ExitCode -eq 3010) {
-            Write-Host "  Installation completed successfully" -ForegroundColor Green
-            if ($proc.ExitCode -eq 3010) {
-                Write-Host "  A system reboot is required" -ForegroundColor Yellow
-            }
-        } else {
-            Write-Host "  Installation returned exit code $($proc.ExitCode)" -ForegroundColor Red
-            Write-Host "  Try running manually:" -ForegroundColor Yellow
-            $manualCmd = "& '" + $vsSetup + "' modify --installPath '" + $vsInstallPath + "'"
-            foreach ($wl in $workloads) { $manualCmd += " --add $wl" }
-            $manualCmd += " --includeRecommended --passive"
-            Write-Host "  $manualCmd" -ForegroundColor Gray
+        Write-Status "Launching Visual Studio Installer to add C++ workloads..." Yellow
+        $proc = Start-Process -FilePath $vsSetup -ArgumentList $addArgs -Wait -PassThru
+        if ($proc.ExitCode -notin @(0, 3010)) {
+            throw "Visual Studio Installer exited with code $($proc.ExitCode). Review installer logs and repair the workload installation."
         }
-    } else {
-        Write-Host "  All workloads already installed" -ForegroundColor Green
+        if ($proc.ExitCode -eq 3010) {
+            Write-Status "Installer completed; a reboot is required." Yellow
+        }
+
+        $msvcVersions = @()
+        if (Test-Path -LiteralPath $msvcDir -PathType Container) {
+            $msvcVersions = @(Get-ChildItem -LiteralPath $msvcDir -Directory -ErrorAction SilentlyContinue)
+        }
+        if ($msvcVersions.Count -eq 0) {
+            throw "Installation returned successfully but MSVC could not be verified. Check workloads in Visual Studio Installer."
+        }
+    } elseif ($SkipInstall -and ($msvcVersions.Count -eq 0 -or $missingPaths.Count -gt 0)) {
+        throw "Required C++ build tools appear to be missing and installation was skipped."
     }
-} else {
-    Write-Host "[3/5] Installation skipped (--SkipInstall)" -ForegroundColor Yellow
+
+    Write-Status ""
+    Write-Status "=== Visual Studio toolchain check completed ===" Cyan
+    Write-Status "Verify compatibility against the exact Unreal Engine build requirements." Gray
+    exit 0
 }
-
-Write-Host "[4/5] Verifying installation..." -ForegroundColor Yellow
-$msvcDir = "$vsInstallPath\VC\Tools\MSVC"
-$hasMsvcAfter = (Test-Path $msvcDir) -and ((Get-ChildItem $msvcDir -ErrorAction SilentlyContinue).Count -gt 0)
-
-if ($hasMsvcAfter) {
-    $msvcVer = (Get-ChildItem $msvcDir -ErrorAction SilentlyContinue | Select-Object -First 1).Name
-    Write-Host "  MSVC $msvcVer - OK" -ForegroundColor Green
-} else {
-    Write-Host "  MSVC toolchain still missing" -ForegroundColor Red
-}
-
-Write-Host "[5/5] Configuring environment..." -ForegroundColor Yellow
-$msbuildPath = "$vsInstallPath\MSBuild\Current\Bin"
-if (Test-Path $msbuildPath) {
-    $currentPath = [Environment]::GetEnvironmentVariable("Path", "User")
-    if ($currentPath -notlike "*$msbuildPath*") {
-        [Environment]::SetEnvironmentVariable("Path", "$msbuildPath;$currentPath", "User")
-        Write-Host "  Added MSBuild to PATH" -ForegroundColor Green
-    } else {
-        Write-Host "  MSBuild already in PATH" -ForegroundColor Green
-    }
-} else {
-    Write-Host "  MSBuild not found at expected path" -ForegroundColor Yellow
-}
-
-Write-Host ""
-Write-Host "=== VS 2026 Setup Complete ===" -ForegroundColor Cyan
-Write-Host ""
-Write-Host "Summary:" -ForegroundColor White
-Write-Host "  Engine: UE 5.8 at C:\Program Files\Epic Games\UE_5.8" -ForegroundColor Gray
-Write-Host "  Editor: $vsInstallPath\Common7\IDE\devenv.exe" -ForegroundColor Gray
-
-if ($hasMsvcAfter) {
-    Write-Host ""
-    Write-Host "You can now generate project files and build for UE 5.8." -ForegroundColor Green
-} else {
-    Write-Host ""
-    Write-Host "NOTE: C++ development tools need to be installed first." -ForegroundColor Yellow
-    Write-Host "Run this script again with admin privileges, or install manually:" -ForegroundColor Yellow
-    Write-Host "  Visual Studio Installer > Modify > Workloads > Game development with C++" -ForegroundColor Gray
+catch {
+    Write-Status "ERROR: $($_.Exception.Message)" Red
+    exit 1
 }
