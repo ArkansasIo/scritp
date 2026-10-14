@@ -23,8 +23,8 @@ jobs:
       - name: Parse PowerShell scripts
         shell: pwsh
         run: |
-          $scripts = Get-ChildItem -Path . -Filter '*.ps1' -Recurse
-          if (-not $scripts) {
+          $scripts = @(Get-ChildItem -Path . -Filter '*.ps1' -Recurse)
+          if ($scripts.Count -eq 0) {
             throw 'No PowerShell scripts were found.'
           }
 
@@ -38,8 +38,8 @@ jobs:
 
             if ($errors.Count -gt 0) {
               $failed = $true
-              Write-Error "Parse errors in $($script.FullName):"
-              $errors | ForEach-Object { Write-Error $_.Message }
+              Write-Host "Parse errors in $($script.FullName):"
+              $errors | ForEach-Object { Write-Host $_.Message }
             }
           }
 
@@ -50,10 +50,17 @@ jobs:
       - name: Run PSScriptAnalyzer
         shell: pwsh
         run: |
-          $scripts = Get-ChildItem -Path . -Filter '*.ps1' -Recurse
-          $results = Invoke-ScriptAnalyzer -Path $scripts.FullName -Severity Error
-          if ($results) {
-            $results | Format-Table -AutoSize | Out-String | Write-Host
+          $scripts = @(Get-ChildItem -Path . -Filter '*.ps1' -Recurse)
+          $failed = $false
+          foreach ($script in $scripts) {
+            $results = @(Invoke-ScriptAnalyzer -Path $script.FullName -Severity Error)
+            if ($results.Count -gt 0) {
+              $failed = $true
+              Write-Host "PSScriptAnalyzer errors in $($script.FullName):"
+              $results | Format-Table -AutoSize | Out-String | Write-Host
+            }
+          }
+          if ($failed) {
             exit 1
           }
 
@@ -61,8 +68,8 @@ jobs:
         shell: pwsh
         run: |
           $required = @('README.md', 'SECURITY.md', '.gitignore', 'docs/SETUP_TROUBLESHOOTING.md')
-          $missing = $required | Where-Object { -not (Test-Path $_) }
-          if ($missing) {
+          $missing = @($required | Where-Object { -not (Test-Path $_) })
+          if ($missing.Count -gt 0) {
             Write-Error "Missing expected files: $($missing -join ', ')"
             exit 1
           }
