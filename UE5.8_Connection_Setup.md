@@ -1,195 +1,97 @@
-# Unreal Engine 5.8 — Remote Connection Setup Guide
+# Unreal Engine 5.8 — Remote Development Connection Guide
 
-> **PC:** `C:\Users\Shadow`  
-> **Target Engine:** Unreal Engine 5.8  
-> **Purpose:** Connect from this development machine to a running UE5.8 editor or packaged instance.
+This guide covers common remote-development patterns for Unreal Engine 5.8. Exact plugin settings and available endpoints can vary by engine version, project configuration, and installed plugins. Verify against the version-specific official documentation before deployment.
 
----
+> **Security:** Do not expose editor-control services or remote code execution directly to the public internet. Use a trusted private network or VPN, restrict access at the firewall, and enable authentication and access controls supported by each service.
 
-## 1. Remote Control API (HTTP)
+## 1. Remote Control API
 
-Best for automation, web dashboards, and tooling integration.
+**Use case:** Trusted automation tools, dashboards, and development workflows.
 
-### On the UE machine
+1. Enable the Remote Control plugin in the Unreal Editor and restart if requested.
+2. Open the plugin's Project Settings and verify whether the HTTP and/or WebSocket servers are enabled.
+3. Configure exposed actors, properties, and functions using the Remote Control interface.
+4. Verify the bind address, port, authentication options, and firewall scope for your engine build.
+5. Test from an authorized client on the same private development network.
 
-1. **Enable the plugin:**
-   - Edit > Plugins > Built-in > Remote Control > **Enabled**
-   - Restart the editor.
+Do not assume a default port, endpoint path, or authentication behavior without checking the installed version's settings and documentation. Treat exposed functions as privileged controls over a running editor or application.
 
-2. **Configure remote control:**
-   - Edit > Project Settings > Plugins > Remote Control
-   - Enable HTTP Server
-   - Set **HTTP Port** (default `30010`)
-   - Optionally enable WebSocket Server (default `30020`)
+## 2. Pixel Streaming
 
-3. **Expose properties/functions:**
-   - Window > Remote Control > Web App > **Manage Exposed Controllers**
-   - Add the actors, properties, or functions you want accessible.
+**Use case:** Interactive rendering streamed to a browser.
 
-4. **Firewall:** Allow inbound on the chosen ports (`30010`/`30020`).
+1. Enable the Pixel Streaming plugin or plugins required by your specific engine release.
+2. Follow the matching release's Pixel Streaming deployment instructions for its signalling server, web frontend, streamer, and WebRTC configuration.
+3. Confirm required TCP/UDP traffic and ICE/STUN/TURN configuration for your network.
+4. Use HTTPS and a suitable secure deployment configuration when serving browsers outside a local development environment.
+5. Review signalling-server logs and browser developer-console errors while testing.
 
-### From this PC
+The location and command line for the signalling server have changed across Unreal Engine releases. Do not rely on a hard-coded server path copied from a different engine version.
 
-```powershell
-# Test connection (replace IP with UE machine's IP)
-curl http://<UE_IP>:30010/remote/object?objectPath=/Script/Engine.Default__Actor
-```
+## 3. Python editor automation
 
-**Common endpoints:**
-- `GET /remote/object` — read property values
-- `PUT /remote/object` — set property values
-- `PUT /remote/object/call` — call functions
-- `GET /remote/search` — search for objects
+**Use case:** Automating editor tasks and content pipelines.
 
----
+1. Enable the Python Editor Script Plugin only on development machines that need it.
+2. Check the plugin's current documentation and settings for the supported execution modes.
+3. Treat remotely submitted scripts as trusted code with the privileges of the editor process.
+4. Do not expose Python execution to untrusted networks or clients.
+5. Prefer local automation, a controlled job runner, or a narrowly scoped authenticated service when a remote workflow is needed.
 
-## 2. Pixel Streaming (WebRTC)
+The Python remote-execution mechanism is not necessarily an HTTP API. Do not send an HTTP POST with a guessed JSON body to a UDP or message-based remote-execution service. Confirm the actual protocol and use the official client/library for the installed version.
 
-Best for high-fidelity interactive streaming to a browser.
+## 4. Live Coding and remote builds
 
-### On the UE machine
+Live Coding supports rapid C++ iteration in a compatible local Unreal Editor session. It is not a generic network service for compiling code across machines.
 
-1. **Enable the plugin:**
-   - Edit > Plugins > Built-in > Graphics > Pixel Streaming > **Enabled**
-   - Restart.
-
-2. **Configure:**
-   - Edit > Project Settings > Plugins > Pixel Streaming
-   - **Signalling Server Port:** `8888`
-   - **Streamer Port:** `8889`
-
-3. **Launch the signalling server:**
-   ```powershell
-   # From the UE engine directory
-   .\Engine\Source\Programs\PixelStreaming\WebServers\SignallingWebServer\run.bat
-   ```
-
-4. **Start streaming:**
-   - Window > Pixel Streaming > Start Signalling Server
-   - Window > Pixel Streaming > Start Streamer
-
-5. **Firewall:** Allow ports `8888` (WebRTC) and `80`/`443` (browser frontend).
-
-### From this PC
-
-Open a browser to:
-```
-http://<UE_IP>:8888
-```
-
----
-
-## 3. Python Remote Execution
-
-Best for scripting and editor automation.
-
-### On the UE machine
-
-1. **Enable the plugin:**
-   - Edit > Plugins > Built-in > Scripting > Python Editor Script Plugin > **Enabled**
-   - Restart.
-
-2. **Enable remote execution:**
-   - Edit > Project Settings > Plugins > Python Editor Script Plugin
-   - Enable **Remote Execution**
-   - Set **Remote Execution Port** (default `30030`)
-
-3. **Firewall:** Allow port `30030`.
-
-### From this PC
-
-```powershell
-# Using the Python remote executor
-python -m unreal.RemoteExecutor --host <UE_IP> --port 30030
-```
-
-Or with curl:
-```powershell
-curl -X POST http://<UE_IP>:30030/execute `
-  -H "Content-Type: application/json" `
-  -d '{"command": "print(unreal.get_editor_subsystem(unreal.EditorActorSubsystem).get_all_level_actors())"}'
-```
-
----
-
-## 4. Live Coding / Hot Reload
-
-Best for iterative C++ development.
-
-### Setup
-
-1. **On the UE machine:**
-   - Edit > Editor Preferences > General > Live Coding > **Enable Live Coding**
-   - Or launch with `-LiveCoding` command-line arg.
-
-2. **Connection:** Live Coding uses named pipes (Windows) — no network config needed. It works automatically when the project is compiled from Visual Studio or Rider on the **same machine**.
-
-> **Note:** Live Coding does not work across separate machines. For remote C++ iteration, use the Remote Control API to trigger recompiles or use network shares + symlinks.
-
----
+For remote development, use source control and a build agent on the target machine, or a controlled remote desktop/IDE workflow. Ensure the engine source/build configuration and compiler toolchain match the Unreal Engine version.
 
 ## 5. Multi-User Editing
 
-Best for collaborative level editing.
+**Use case:** Collaborative level editing in a controlled development network.
 
-### On each UE machine
+1. Enable Multi-User Editing only for projects and users that require it.
+2. Configure the server/session according to the engine version's documentation.
+3. Keep discovery and collaboration traffic inside the trusted network.
+4. Allow only the required ports and protocols through local firewall policy.
+5. Validate the complete connection from each workstation; firewall ports alone do not prove the session is configured correctly.
 
-1. Enable the plugin:
-   - Edit > Plugins > Built-in > Editor > Multi-User Editing > **Enabled**
+Do not assume that the entire UDP range listed by an older guide is needed. Identify the protocol and ports used by your current server configuration.
 
-2. **Configure session:**
-   - Window > Multi-User > **Create Session**
-   - Set session name
-   - Note the **Unicast Endpoint** port (default `9030`)
+## 6. Safe connectivity checks
 
-3. **Firewall:** Allow inbound UDP on `9030`–`9040`.
+For services that use TCP, run this from an authorized client after confirming the correct host and port:
 
-### Joining from this PC
+\`\`\`powershell
+Test-NetConnection -ComputerName <HOSTNAME_OR_IP> -Port <TCP_PORT>
+\`\`\`
 
-- Window > Multi-User > **Join Session**
-- Sessions appear automatically via UDP discovery; or enter the host IP manually.
+This tests TCP reachability only. It does not validate authentication, API paths, plugin configuration, WebRTC connectivity, or application-level health.
 
----
+## 7. Firewall guidance
 
-## 6. Quick Network Connectivity Check
+The setup script intentionally does not create inbound firewall rules by default. Before adding a rule:
 
-```powershell
-# Test basic connectivity
-Test-NetConnection -ComputerName <UE_IP> -Port 30010
-
-# Find the UE machine's IP on the engine side
-# (Run on the UE machine)
-ipconfig
-```
-
----
-
-## Port Reference
-
-| Service                | Default Port | Protocol |
-|------------------------|-------------|----------|
-| Remote Control HTTP    | 30010       | TCP      |
-| Remote Control WebSocket | 30020     | TCP      |
-| Python Remote Exec     | 30030       | TCP      |
-| Pixel Streaming (HTTP) | 8888        | TCP      |
-| Pixel Streaming (Data) | 8889        | TCP      |
-| Multi-User Editing     | 9030–9040   | UDP      |
-
----
+- Identify the exact service and protocol that require it.
+- Restrict the remote-address scope to known, trusted peers.
+- Keep the rule limited to the required local port and network profile.
+- Remove the rule when the service is disabled or no longer required.
+- Never treat a firewall rule as a replacement for application-layer authentication.
 
 ## Troubleshooting
 
-| Symptom | Check |
-|---------|-------|
-| Connection refused | Port blocked by firewall; service not running |
-| Timeout | Wrong IP address; network isolation (different VLAN/subnet) |
-| Auth required | Enable authentication in project settings; add token to requests |
-| Pixel Streaming blank | WebRTC requires HTTPS in modern browsers; use `--allow-running-insecure-content` flag |
+| Symptom | Checks |
+|---|---|
+| Connection refused | Confirm the service is enabled, running, listening on the configured address and port, and not bound to loopback only. |
+| Timeout | Verify host/IP, routing, VLAN/VPN membership, firewall policy, and protocol. |
+| Authentication failure | Confirm authentication settings and credentials through the official service configuration. Do not disable authentication as a workaround. |
+| Pixel Streaming loads but has no video/input | Check signalling logs, browser console, WebRTC/ICE configuration, codec support, and firewall/NAT behavior. |
+| Multi-User session is not discoverable | Verify server startup, discovery settings, network segmentation, and the documented ports for the installed version. |
+| Python automation cannot connect | Confirm the supported remote-execution mechanism and use its actual client/protocol rather than assuming HTTP. |
 
----
+## Official references
 
-## References
-
-- [UE Remote Control API Docs](https://docs.unrealengine.com/5.3/en-US/remote-control-api/)
-- [UE Pixel Streaming Docs](https://docs.unrealengine.com/5.3/en-US/pixel-streaming-in-unreal-engine/)
-- [UE Python Scripting](https://docs.unrealengine.com/5.3/en-US/python-scripting/)
+- [Unreal Engine 5.8 release announcement](https://www.unrealengine.com/news/unreal-engine-5-8-is-now-available)
+- [Unreal Engine documentation](https://dev.epicgames.com/documentation/en-us/unreal-engine)
+- [Pixel Streaming documentation](https://dev.epicgames.com/documentation/en-us/unreal-engine/pixel-streaming-in-unreal-engine)
+- [Python scripting in Unreal Engine](https://dev.epicgames.com/documentation/en-us/unreal-engine/scripting-the-unreal-editor-using-python)
