@@ -32,3 +32,12 @@ Thumbs.db
 *.pem
 *.key
 secrets/
+
+
+# Local licensed Unreal Engine source/build checkout (never commit)
+LocalEngine/
+UnrealEngine-*/
+**/Binaries/
+**/Intermediate/
+**/DerivedDataCache/
+**/Saved/

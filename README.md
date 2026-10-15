@@ -51,3 +51,18 @@ No Windows PowerShell execution, Unreal Editor launch, network connection, or bu
 
 - [Unreal Engine 5.8 announcement](https://www.unrealengine.com/news/unreal-engine-5-8-is-now-available)
 - [Visual Studio 2026 release notes](https://learn.microsoft.com/en-us/visualstudio/releases/2026/release-notes)
+
+
+## Engine source and future-version migration workspace
+
+This repository includes a local source-access helper and documentation-first workspaces for UE5.8 and future migration targets UE6–UE10.
+
+- [Source access and local clone instructions](ENGINE_SOURCE_ACCESS.md)
+- [Clone UE5.8 source locally](Clone-UE5.8-Source.ps1)
+- [Engine version workspace index](EngineVersions/README.md)
+- [Migration architecture](docs/ENGINE_MIGRATION_ARCHITECTURE.md)
+- [Engine version support matrix](docs/ENGINE_VERSION_MATRIX.md)
+- [Migration checklist](docs/MIGRATION_CHECKLIST.md)
+- [Source licensing and repository policy](docs/UNREAL_SOURCE_LICENSE_AND_REPOSITORY_POLICY.md)
+
+**Important:** Epic's licensed engine source is cloned locally after account authorization and is not stored in this repository. UE6–UE10 folders are planning scaffolds; future-version APIs are not fabricated.
